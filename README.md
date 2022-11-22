@@ -15,7 +15,7 @@ Option 1: Using `qemu`:
 ```sh
 git clone https://github.com/RedsonBr140/BlobOS.git
 cd BlobOS
-make run # This build and run the project using QEMU.
+make run # This builds and runs the project using QEMU.
 ```
 Option 2: Real hardware:
 ```sh
