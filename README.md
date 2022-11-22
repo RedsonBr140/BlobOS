@@ -7,6 +7,7 @@ The only point with this project is to learn Assembly, I don't want to create so
 ## 🚀 Setup
 ### 🧾 Dependencies
  - [`nasm`](https://nasm.us/) - Assembler, you need for build the OS.
+ - [`mtools`](https://savannah.gnu.org/projects/mtools) - Get the kernel inside the floppy.
  - [`qemu`](https://www.qemu.org/) - Virtualization, for testing the OS without rebooting. _(optional)_
 
 ### 🔧 Testing
