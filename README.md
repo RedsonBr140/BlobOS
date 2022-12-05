@@ -2,7 +2,7 @@
 <p align=center>My Operating System</p>
 
 ## 💡 About
-The only point with this project is to learn Assembly, I don't want to create something huge.
+The point with this project is to learn about operating systems and computers, I don't want to create something huge.
 
 ## 🚀 Setup
 ### 🧾 Dependencies
