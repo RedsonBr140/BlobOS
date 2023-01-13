@@ -12,14 +12,14 @@ BOOT_SRC = $(wildcard boot/*.asm)
 BOOT_OBJ = $(BOOT_SRC:boot/%.asm=$(BUILD_DIR)/%.o)
 
 FLAGS = -O2 -m32 -ffreestanding
-CFLAGS += -c							\
-					-W							\
-					-Wall						\
-					-std=gnu99			\
+CFLAGS += -c						\
+					-W		\
+					-Wall		\
+					-std=gnu99	\
 					$(FLAGS)
-
-LDFLAGS += -T linker.ld 	\
-					 -nostdlib			\
+					
+LDFLAGS += -T linker.ld 				\
+					 -nostdlib	\
 					 -z noexecstack \
 					 $(FLAGS)
 
