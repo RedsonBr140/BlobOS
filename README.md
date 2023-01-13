@@ -7,8 +7,8 @@ The point with this project is to learn about operating systems and computers, I
 ## 🚀 Setup
 ### 🧾 Dependencies
  - [`nasm`](https://nasm.us/) - Assembler, you need for build the OS.
- - [`mtools`](https://savannah.gnu.org/projects/mtools) - Get the kernel inside the floppy.
  - [`qemu`](https://www.qemu.org/) - Virtualization, for testing the OS without rebooting. _(optional)_
+  - [`GRUB & grub-mkrescue`](https://git.savannah.gnu.org/cgit/grub.git/) - Building the ISO, you also need the i386 version of grub, or just use `make run-bin` _(optional)_
 
 ### 🔧 Testing
 
@@ -22,7 +22,7 @@ Option 2: Real hardware:
 ```sh
 git clone https://github.com/RedsonBr140/BlobOS.git
 cd BlobOS
-make floppy_image # Build the floppy disk
-dd if=build/main_floppy.img of=/dev/yourFlashDrive status=progress
+make buildISO # Build the ISO Image.
+dd if=build/BlobOS.iso of=/dev/yourFlashDrive status=progress
 ```
-> ⚠️ dd is a dangeours command, make sure that you didn't set `of` to any disk with important information, also, it will overwrite anything on the disk, including partitions.
+> ⚠️ dd is a dangerours command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
