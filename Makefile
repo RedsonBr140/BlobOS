@@ -1,36 +1,38 @@
 PROJ_NAME=BlobOS
 
-ASSEMBLER =nasm
-KERN_SRC = $(wildcard ./kernel/*.c wildcard ./kernel/*.h)
-BOOT_SRC = $(wildcard ./boot/*.asm)
-BOOT_OBJ = $(subst .asm,.o,$(subst boot/,build/,$(BOOT_SRC)))
-KERN_OBJ = $(subst .c,.o,$(subst kernel/,build/,$(KERN_SRC)))
+
 BUILD_DIR ?= build
+ASM ?= nasm
+CC ?= cc
+
+KERN_SRC = $(wildcard kernel/*.c)
+KERN_OBJ=$(KERN_SRC:kernel/%.c=$(BUILD_DIR)/%.o)
+
+BOOT_SRC = $(wildcard boot/*.asm)
+BOOT_OBJ = $(BOOT_SRC:boot/%.asm=$(BUILD_DIR)/%.o)
+
+FLAGS = -O2 -m32 -ffreestanding
 CFLAGS += -c							\
 					-W							\
 					-Wall						\
-					-O2							\
-					-m32						\
 					-std=gnu99			\
-					-ffreestanding	\
+					$(FLAGS)
 
 LDFLAGS += -T linker.ld 	\
-					 -O2						\
-					 -m32						\
 					 -nostdlib			\
-					 -ffreestanding \
-					 -z noexecstack
+					 -z noexecstack \
+					 $(FLAGS)
 
 all: options buildFolder $(PROJ_NAME)
 
 $(PROJ_NAME): $(KERN_OBJ) $(BOOT_OBJ)
-	$(CC) $? -o $(BUILD_DIR)/$@.bin $(LDFLAGS)
+	$(CC) $(LDFLAGS) $^ -o build/$@.bin
 
 $(BOOT_OBJ): $(BOOT_SRC)
-	$(ASSEMBLER) -felf32 $< -o $@
+	nasm -felf32 $^ -o $@
 
-$(KERN_OBJ): $(KERN_SRC)
-	$(CC) $< -o $@ $(CFLAGS)
+build/%.o: kernel/%.c
+	$(CC) $(CFLAGS) $< -o $@
 
 buildISO: $(PROJ_NAME)
 	cp $(BUILD_DIR)/$<.bin $(BUILD_DIR)/isodir/boot/
@@ -55,5 +57,9 @@ options:
 	@echo "CFLAGS = $(CFLAGS)"
 	@echo "LDFLAGS = $(LDFLAGS)"
 	@echo "CC = $(CC)"
-	@echo "ASSEMBLER = $(ASSEMBLER)\n"
+	@echo "ASM = $(ASM)\n"
 
+clean:
+	rm -rf build/
+
+.PHONY: all options run run-bin buildFolder buildISO clean
