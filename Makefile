@@ -1,30 +1,59 @@
-ASSEMBLER=nasm
-SRC_DIR=src
-BUILD_DIR=build
+PROJ_NAME=BlobOS
 
-.PHONY: all floppy_image kernel bootloader run
+ASSEMBLER =nasm
+KERN_SRC = $(wildcard ./kernel/*.c wildcard ./kernel/*.h)
+BOOT_SRC = $(wildcard ./boot/*.asm)
+BOOT_OBJ = $(subst .asm,.o,$(subst boot/,build/,$(BOOT_SRC)))
+KERN_OBJ = $(subst .c,.o,$(subst kernel/,build/,$(KERN_SRC)))
+BUILD_DIR ?= build
+CFLAGS += -c							\
+					-W							\
+					-Wall						\
+					-O2							\
+					-m32						\
+					-std=gnu99			\
+					-ffreestanding	\
 
-floppy_image: $(BUILD_DIR)/main_floppy.img
+LDFLAGS += -T linker.ld 	\
+					 -O2						\
+					 -m32						\
+					 -nostdlib			\
+					 -ffreestanding \
+					 -z noexecstack
 
-$(BUILD_DIR)/main_floppy.img: bootloader #kernel There's no kernel
-	dd if=/dev/zero of=$(BUILD_DIR)/main_floppy.img bs=512 count=2880
-	mkfs.fat -F 12 $(BUILD_DIR)/main_floppy.img
-	dd if=$(BUILD_DIR)/bootloader.bin of=$(BUILD_DIR)/main_floppy.img conv=notrunc
-#mcopy -i $(BUILD_DIR)/main_floppy.img $(BUILD_DIR)/kernel.bin "::kernel.bin"
+all: options buildFolder $(PROJ_NAME)
 
-kernel: $(BUILD_DIR)/kernel.bin
+$(PROJ_NAME): $(KERN_OBJ) $(BOOT_OBJ)
+	$(CC) $? -o $(BUILD_DIR)/$@.bin $(LDFLAGS)
 
-$(BUILD_DIR)/kernel.bin: builddir
-	$(ASSEMBLER) $(wildcard $(SRC_DIR)/kernel/*) -f bin -o $(BUILD_DIR)/kernel.bin
+$(BOOT_OBJ): $(BOOT_SRC)
+	$(ASSEMBLER) -felf32 $< -o $@
 
-bootloader: $(BUILD_DIR)/bootloader.bin
+$(KERN_OBJ): $(KERN_SRC)
+	$(CC) $< -o $@ $(CFLAGS)
 
-$(BUILD_DIR)/bootloader.bin: builddir
-	$(ASSEMBLER) $(SRC_DIR)/boot/boot.asm -f bin -o $(BUILD_DIR)/bootloader.bin
+buildISO: $(PROJ_NAME)
+	cp $(BUILD_DIR)/$<.bin $(BUILD_DIR)/isodir/boot/
+	cp boot/grub.cfg $(BUILD_DIR)/isodir/boot/grub/
+	grub-mkrescue -o $(BUILD_DIR)/$<.iso $(BUILD_DIR)/isodir
 
-builddir:
-	@mkdir -p $(BUILD_DIR)
+run: all buildISO
+	@echo "Running!"
+	qemu-system-i386 -cdrom build/$(PROJ_NAME).iso -audiodev pa,id=audio0 -machine pcspk-audiodev=audio0
 
-run: floppy_image
-	@echo "Running"
-	@qemu-system-i386 -drive file=$(BUILD_DIR)/main_floppy.img,format=raw -audiodev pa,id=audio0 -machine pcspk-audiodev=audio0
+run-bin: all 
+	@echo "Running!"
+	qemu-system-i386 -kernel build/$(PROJ_NAME).bin -audiodev pa,id=audio0 -machine pcspk-audiodev=audio0
+
+
+
+buildFolder:
+	@mkdir -p $(BUILD_DIR)/isodir/boot/grub
+
+options: 
+	@echo $(PROJ_NAME) build options:
+	@echo "CFLAGS = $(CFLAGS)"
+	@echo "LDFLAGS = $(LDFLAGS)"
+	@echo "CC = $(CC)"
+	@echo "ASSEMBLER = $(ASSEMBLER)\n"
+
