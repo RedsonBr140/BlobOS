@@ -1,4 +1,4 @@
-project('BlobOS', ['c', 'nasm'], version: '0.1.0')
+project('BlobOS', ['c', 'nasm'], version: '0.1.1')
 
 source_root = meson.source_root()
 grub_mkrescue = find_program('grub-mkrescue')
