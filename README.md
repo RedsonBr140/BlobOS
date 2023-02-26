@@ -25,4 +25,4 @@ cd BlobOS
 make buildISO # Build the ISO Image.
 dd if=build/BlobOS.iso of=/dev/yourFlashDrive status=progress
 ```
-> ⚠️ dd is a dangerours command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
+> ⚠️ dd is a dangerous command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
