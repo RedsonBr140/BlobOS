@@ -31,6 +31,10 @@ SECTIONS
 		*(.data)
 	}
 
+    .gdt BLOCK(4) : ALIGN(4)
+    {
+        *(.gdt)
+    }
 	/* Read-write data (uninitialized) and stack */
 	.bss BLOCK(4K) : ALIGN(4K)
 	{

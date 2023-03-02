@@ -1,1 +1,1 @@
-boot_sources = files('boot.asm')
+boot_sources = files('boot.asm', 'gdt.asm')
