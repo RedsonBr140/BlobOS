@@ -37,26 +37,24 @@ stack_top:
 section .text
 global _start:function (_start.end - _start)
 _start:
-	cli
-	lgdt [gdt_descriptor]
+	mov esp, stack_top ; Set the esp register to the top of the stack, as it grows downwards.
+	lgdt [gdt_descriptor] ; Loading the GDT table
+	mov ax, 0x10 ; We want to reload the code segment
+	; Reloading the segment registers
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
 
-	; To set up a stack, we set the esp register to point to the top of our
-	; stack (as it grows downwards on x86 systems). This is necessarily done
-	; in assembly as languages such as C cannot function without a stack.
-	mov esp, stack_top
-
-	; This is a good place to initialize crucial processor state before the
-	; high-level kernel is entered. It's best to minimize the early
-	; environment where crucial features are offline. Note that the
-	; processor is not fully initialized yet: Features such as floating
-	; point instructions and instruction set extensions are not initialized
-	; yet. The GDT should be loaded here. Paging should be enabled here.
-	; C++ features such as global constructors and exceptions will require
-	; runtime support to work as well.
-
-  ; note, that if you are building on Windows, C functions may have "_" prefix in assembly: _kernel_main
+	; As we're inside an "old" function in the code segment, we have to jump to the new one.
+	; Specifying the value inside CS, in this case, 0x08.
+	jmp 0x08:.code
+.code:
+	; note, that if you are building on Windows, C functions may have "_" prefix in assembly: _kernel_main
 	extern kernel_main
 	call kernel_main
-.hang: hlt
+.hang: 
+	hlt
 	jmp .hang
 .end:
