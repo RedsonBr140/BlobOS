@@ -10,13 +10,14 @@ nasm_flags = ['-f', 'elf32']
 
 subdir('kernel')
 subdir('boot')
+subdir('drivers')
 
 binary = executable('BlobOS.bin',
-  sources: [boot_sources, kernel_sources],
+  sources: [boot_sources, kernel_sources, drivers_src],
   link_args: link_args,
   c_args : c_flags,
   nasm_args: nasm_flags,
-  include_directories: 'kernel/include'
+  include_directories: [kernel_inc, drivers_inc]
 )
 
 iso = custom_target(

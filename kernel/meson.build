@@ -1,1 +1,2 @@
-kernel_sources = files('kernel.c', 'terminal.c')
+kernel_sources = files('kernel.c')
+kernel_inc = include_directories('include')
