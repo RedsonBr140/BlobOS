@@ -38,5 +38,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: BlobOS ISO
-        path: build/BlobOS.iso # Change this to the path of your OS build artifacts
+        name: BlobOS_BIN
+        path: build/BlobOS.bin # Change this to the path of your OS build artifacts
