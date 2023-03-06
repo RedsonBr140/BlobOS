@@ -40,5 +40,5 @@ void k_printf(const char *format, ...) {
 
 void kernel_main(void) {
     terminal_initialize();
-    k_printf("Welcome to BlobOS!");
+    k_printf("Welcome to BlobOS!\n");
 }
