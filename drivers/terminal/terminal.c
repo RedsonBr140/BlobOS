@@ -1,8 +1,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "kernel/include/kernel.h"
 #include "include/terminal.h"
+#include "kernel/include/io_ports.h"
+#include "kernel/include/kernel.h"
 #include "libc/include/string.h"
 
 static const size_t VGA_WIDTH = 80;
@@ -12,6 +13,15 @@ size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
 uint16_t *terminal_buffer;
+
+void update_cursor(int x, int y) {
+    uint16_t pos = y * VGA_WIDTH + x;
+
+    outb(0x3D4, 0x0F);
+    outb(0x3D5, (uint8_t)(pos & 0xFF));
+    outb(0x3D4, 0x0E);
+    outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+}
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
     return fg | bg << 4;
@@ -39,7 +49,9 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
     const size_t index = y * VGA_WIDTH + x;
 
     if (index >= VGA_WIDTH * VGA_HEIGHT) {
-        k_printf("Error: Attempted to write to an invalid memory address (row=%d, col=%d)\n", terminal_row, terminal_column);
+        k_printf("Error: Attempted to write to an invalid memory address "
+                 "(row=%d, col=%d)\n",
+                 terminal_row, terminal_column);
         return;
     }
 
