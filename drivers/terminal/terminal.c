@@ -69,24 +69,33 @@ void terminal_scroll(void) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
         terminal_putentryat(' ', terminal_color, x, last_row_offset);
     }
-
-    // Decrement the row position to stay within bounds
-    terminal_row--;
 }
 
 void terminal_putchar(char c) {
     if (c == '\n') {
-        terminal_row++;
-        terminal_column = 0;
+        if (terminal_row + 1 == VGA_HEIGHT) {
+            terminal_scroll();
+            // If we have reached the last line, we won't be able to go to
+            // another line, so we reset the column to the first position.
+            terminal_column = 0;
+        } else {
+            // Move the cursor to the beginning of the next line.
+            terminal_row++;
+            terminal_column = 0;
+        }
     } else {
-        terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+        // Put the character at the current cursor position and update
+        // the cursor position to the next position. terminal_putentryat(c,
+        // terminal_color, terminal_column, terminal_row);
+        update_cursor(terminal_column + 1, terminal_row);
+
+        // If the cursor reaches the end of the line, move it to the
+        // beginning of the next line. If we have reached the last line,
+        // scroll the terminal.
         if (++terminal_column == VGA_WIDTH) {
             terminal_column = 0;
-
-            if (++terminal_row == VGA_HEIGHT - 1) {
+            if (++terminal_row == VGA_HEIGHT) {
                 terminal_scroll();
-            } else {
-                terminal_row++;
             }
         }
     }
