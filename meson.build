@@ -4,7 +4,7 @@ source_root = meson.source_root()
 grub_mkrescue = find_program('grub-mkrescue')
 
 global_flags = ['-O3', '-m32', '-ffreestanding']
-c_flags = ['-c', '-W', '-Wall', '-std=gnu99', global_flags]
+c_flags = ['-c', '-W', '-Wall', '-std=gnu99', '-fno-stack-protector', global_flags]
 link_args = ['-T', f'@source_root@/linker.ld', '-nostdlib', '-z', 'noexecstack', global_flags]
 nasm_flags = ['-f', 'elf32']
 
@@ -31,7 +31,7 @@ iso = custom_target(
       'cp', f'@source_root@/boot/grub.cfg', 'isodir/boot/grub', '&&',
       grub_mkrescue, '-o', '@OUTPUT@', 'isodir'
     ],
-    build_by_default : true,
+    build_by_default : false,
     install : false,
 )
 
