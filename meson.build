@@ -4,7 +4,7 @@ source_root = meson.source_root()
 grub_mkrescue = find_program('grub-mkrescue')
 
 global_flags = ['-O3', '-m32', '-ffreestanding']
-c_flags = ['-c', '-W', '-Wall', '-std=gnu99', '-fno-stack-protector', global_flags]
+c_flags = ['-c', '-W', '-Wall', '-Wextra', '-std=gnu99', '-fno-stack-protector', global_flags]
 link_args = ['-T', f'@source_root@/linker.ld', '-nostdlib', '-z', 'noexecstack', global_flags]
 nasm_flags = ['-f', 'elf32']
 
