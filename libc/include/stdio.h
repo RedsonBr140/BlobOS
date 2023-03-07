@@ -1,4 +1,3 @@
-#ifndef LIBC_STDIO_H
-#define LIBC_STDIO_H
+#pragma once
+
 void k_printf(const char *format, ...);
-#endif // !LIBC_STDIO_H
