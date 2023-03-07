@@ -3,6 +3,17 @@
 
 #include "include/string.h"
 
+void *memcpy(void *dest, const void *src, size_t size) {
+    char *d = dest;
+    const char *s = src;
+
+    while (size--) {
+        *d++ = *s++;
+    }
+
+    return dest;
+}
+
 void *memmove(void *dstptr, const void *srcptr, size_t size) {
     unsigned char *dst = (unsigned char *)dstptr;
     const unsigned char *src = (const unsigned char *)srcptr;
