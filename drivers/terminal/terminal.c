@@ -85,8 +85,8 @@ void terminal_putchar(char c) {
         }
     } else {
         // Put the character at the current cursor position and update
-        // the cursor position to the next position. terminal_putentryat(c,
-        // terminal_color, terminal_column, terminal_row);
+        // the cursor position to the next position.
+        terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
         update_cursor(terminal_column + 1, terminal_row);
 
         // If the cursor reaches the end of the line, move it to the
