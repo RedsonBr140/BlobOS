@@ -1,10 +1,10 @@
+#include "stdio.h"
+#include "drivers/terminal/include/terminal.h"
+#include "stdlib.h"
+#include "string.h"
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "drivers/terminal/include/terminal.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
 
 typedef void (*formatter_t)(va_list *);
 
@@ -26,9 +26,17 @@ static void format_decimal(va_list *args) {
 }
 
 static void format_hexa(va_list *args) {
-    char buffer[sizeof(void *) + 2]; // add space for "0x"
+    char buffer[sizeof(void *) + 2];
+    char prefix[] = "0x";
+    size_t prefix_length = strlen(prefix);
+
     int *pointer = va_arg(*args, void *);
     itoa((int)&pointer, buffer, 16);
+
+    // Shift buffer to the right by two bytes
+    size_t buf_length = strlen(buffer);
+    memmove(buffer + prefix_length, buffer, buf_length);
+    memcpy(buffer, prefix, prefix_length);
 
     terminal_writestring(buffer);
 }
