@@ -42,5 +42,6 @@ run_target(
 
 run_target(
   'run.iso',
+  depends: iso,
   command : ['tools/build-and-run.sh', 'iso'],
 )
