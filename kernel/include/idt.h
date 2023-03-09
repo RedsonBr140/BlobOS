@@ -4,7 +4,9 @@
 
 #define IDT_MAX_DESCRIPTORS 256
 
+void enableInterrupts(void);
 void idtInit(void);
+
 
 // 32-bits IDT Entry.
 typedef struct {
