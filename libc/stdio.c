@@ -49,11 +49,8 @@ static void format_color(va_list *args) {
 }
 
 static const formatter_t FORMATTERS[256] = {
-    ['c'] = format_char,
-    ['s'] = format_string,
-    ['d'] = format_decimal,
-    ['p'] = format_hexa,
-    ['a'] = format_color,
+    ['c'] = format_char, ['s'] = format_string, ['d'] = format_decimal,
+    ['p'] = format_hexa, ['a'] = format_color,
 };
 
 void k_printf(const char *format, ...) {
@@ -75,4 +72,8 @@ void k_printf(const char *format, ...) {
     }
 
     va_end(args);
+}
+
+void k_printok(const char *message) {
+    k_printf("[%aOK%a] %s\n", VGA_COLOR_LIGHT_GREEN, RESET, message);
 }

@@ -1,5 +1,6 @@
 #include "../drivers/terminal/include/terminal.h"
 #include "stdio.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "idt.h"
@@ -21,8 +22,14 @@ void idtSetDescriptor(uint8_t vector, void *isr, uint8_t flags) {
     descriptor->reserved = 0;
 }
 
-void enableInterrupts(void) {
-    __asm__ volatile("sti");
+void enableInterrupts(void) { __asm__ volatile("sti"); }
+
+bool areInterruptsEnabled() {
+    unsigned long flags;
+    asm volatile("pushf\n\t"
+                 "pop %0"
+                 : "=g"(flags));
+    return flags & (1 << 9);
 }
 
 void idtInit(void) {

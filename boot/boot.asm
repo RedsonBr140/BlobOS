@@ -34,7 +34,7 @@ stack_top:
 
 section .data
 loading db "Loading GDT...", 0xA, 0
-loaded db "[OK] GDT Loaded!", 0xA, 0
+loaded db "Loaded GDT!", 0
 
 %include "boot/gdt.asm"
 
@@ -45,6 +45,7 @@ _start:
 
 	extern terminal_initialize
 	extern k_printf
+	extern k_printok
 	; We are initializing the terminal in the assembly code. 
 	; If the kernel fails, at least the screen will be cleared. :trollface:
 	call terminal_initialize
@@ -63,7 +64,7 @@ _start:
 	mov ss, ax
 
 	push loaded
-	call k_printf
+	call k_printok
 	add esp, 4
 
 	; As we're inside an "old" function in the code segment, we have to jump to the new one.

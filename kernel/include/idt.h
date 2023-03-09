@@ -1,12 +1,13 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define IDT_MAX_DESCRIPTORS 256
 
 void enableInterrupts(void);
+bool areInterruptsEnabled();
 void idtInit(void);
-
 
 // 32-bits IDT Entry.
 typedef struct {
