@@ -32,12 +32,27 @@ stack_bottom:
 resb 16384 ; 16 KiB
 stack_top:
 
+section .data
+loading db "Loading GDT...", 0xA, 0
+loaded db "[OK] GDT Loaded!", 0xA, 0
+
 %include "boot/gdt.asm"
 
 section .text
 global _start:function (_start.end - _start)
 _start:
 	mov esp, stack_top ; Set the esp register to the top of the stack, as it grows downwards.
+
+	extern terminal_initialize
+	extern k_printf
+	; We are initializing the terminal in the assembly code. 
+	; If the kernel fails, at least the screen will be cleared. :trollface:
+	call terminal_initialize
+
+	push loading
+	call k_printf
+	add esp, 4
+
 	lgdt [gdt_descriptor] ; Loading the GDT table
 	mov ax, 0x10 ; We want to reload the code segment
 	; Reloading the segment registers
@@ -46,6 +61,10 @@ _start:
 	mov fs, ax
 	mov gs, ax
 	mov ss, ax
+
+	push loaded
+	call k_printf
+	add esp, 4
 
 	; As we're inside an "old" function in the code segment, we have to jump to the new one.
 	; Specifying the value inside CS, in this case, 0x08.
