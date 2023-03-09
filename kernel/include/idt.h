@@ -4,7 +4,6 @@
 
 #define IDT_MAX_DESCRIPTORS 256
 
-
 void idtInit(void);
 
 // 32-bits IDT Entry.
