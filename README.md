@@ -1,4 +1,7 @@
 <h1 align=center><code>BlobOS</code></h1>
+<p align="center">
+  <img src="docs/assets/BlobOS_without_border.png" width="64" height="64"/>
+</p>
 <p align=center>My Operating System</p>
 
 ## 💡 About
