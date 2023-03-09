@@ -8,4 +8,5 @@
 void kernel_main(void) {
 
     idtInit();
+    k_printf("Welcome to %aBlobOS!%a\n", VGA_COLOR_LIGHT_CYAN, RESET);
 }

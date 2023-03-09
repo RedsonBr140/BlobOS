@@ -41,14 +41,19 @@ static void format_hexa(va_list *args) {
     terminal_writestring(buffer);
 }
 
-// add more format specifier functions as needed
+static void format_color(va_list *args) {
+    enum vga_color colors = va_arg(*args, enum vga_color);
+
+    // TODO: Not hardcode the background
+    terminal_setcolor(colors, 0);
+}
 
 static const formatter_t FORMATTERS[256] = {
     ['c'] = format_char,
     ['s'] = format_string,
     ['d'] = format_decimal,
     ['p'] = format_hexa,
-    // set other format specifier mappings as needed
+    ['a'] = format_color,
 };
 
 void k_printf(const char *format, ...) {

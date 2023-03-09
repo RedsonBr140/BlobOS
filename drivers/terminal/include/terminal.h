@@ -19,9 +19,13 @@ enum vga_color {
     VGA_COLOR_LIGHT_MAGENTA = 13,
     VGA_COLOR_LIGHT_BROWN = 14,
     VGA_COLOR_WHITE = 15,
+
+    // Just to make things easier
+    RESET = VGA_COLOR_LIGHT_GREY,
 };
 
 void terminal_initialize(void);
 void terminal_putchar(char c);
 void terminal_write(const char *data, size_t size);
 void terminal_writestring(const char *data);
+void terminal_setcolor(enum vga_color fg, enum vga_color bg);
