@@ -1,10 +1,10 @@
 project('BlobOS', ['c', 'nasm'], version: '0.1.1')
 
 source_root = meson.source_root()
-grub_mkrescue = find_program('grub-mkrescue')
+grub_mkrescue = find_program('grub-mkrescue', 'grub2-mkrescue')
 
-global_flags = ['-O3', '-m32', '-ffreestanding']
-c_flags = ['-c', '-W', '-Wall', '-Wextra', '-std=gnu99', '-fno-stack-protector', global_flags]
+global_flags = ['-O2', '-m32', '-ffreestanding']
+c_flags = ['-c', '-W', '-Wall', '-Wextra', '-std=gnu99', '-fno-stack-protector', '-mno-sse', global_flags]
 link_args = ['-T', f'@source_root@/linker.ld', '-nostdlib', '-z', 'noexecstack', global_flags]
 nasm_flags = ['-f', 'elf32']
 
@@ -42,5 +42,6 @@ run_target(
 
 run_target(
   'run.iso',
+  depends: iso,
   command : ['tools/build-and-run.sh', 'iso'],
 )
