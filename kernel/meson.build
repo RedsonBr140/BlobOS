@@ -1,10 +1,8 @@
+subdir('cpu')
+
 kernel_sources = files(
   'kernel.c',
   'io_ports.c',
-  'idt.c',
-  'idt.asm',
-  'isr.asm',
-  'isr.c'
-)
+) + cpu_sources
 
-kernel_inc = include_directories('include')
+kernel_inc = include_directories('include', 'cpu/include')
