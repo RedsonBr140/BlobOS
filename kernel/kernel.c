@@ -4,8 +4,9 @@
 #include "drivers/terminal/include/terminal.h"
 #include "idt.h"
 #include "libc/include/stdio.h"
+#include "multiboot.h"
 
-void kernel_main(void) {
+void kernel_main(multiboot_info_t *mbi) {
     k_printf("Loading IDT...\n");
     idtInit();
     k_printok("IDT Loaded!");
