@@ -21,11 +21,11 @@ void kernel_main(multiboot_info_t *mbi) {
 
     k_printf("Welcome to %aBlobOS!%a\n", VGA_COLOR_LIGHT_CYAN, RESET);
 
-    if(cpuSupportsBrandString()) {
+    if (cpuSupportsBrandString()) {
         k_printf("Model: %s\n", getBrandString());
     } else {
         CPUInfo cpu = getCPUInfoString();
-        k_printf("Model: %d Family: %d Stepping: %d ext model: %d", cpu.model, cpu.family, cpu.stepping, cpu.ext_model);
+        k_printf("Model: %d Family: %d Stepping: %d", cpu.model,
+                 cpu.family, cpu.stepping);
     }
-
 }
