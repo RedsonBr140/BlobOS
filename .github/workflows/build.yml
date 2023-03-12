@@ -19,6 +19,8 @@ jobs:
 
     - name: Install Rust Nightly
       run: rustup update nightly && rustup default nightly
+    - name: Install rust-src
+      run: rustup component add rust-src --toolchain nightly
 
     - name: Build
       run: cargo build --verbose --target x86_64-BlobOS.json
