@@ -24,7 +24,7 @@ char *getBrandString() {
     return str;
 }
 
-CPUInfo getCPUInfoString() {
+CPUInfo getCPUInfo() {
     unsigned int eax, unused;
     CPUInfo cpu;
     __get_cpuid(1, &eax, &unused, &unused, &unused);
