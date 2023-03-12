@@ -12,6 +12,9 @@ The point with this project is to learn about operating systems and computers, I
 ### 🧾 Dependencies
  - [`rustup`](https://rustup.rs/) - Installer for the Rust programming language.
  - `rust-nightly` - The latest version of Rust.
+ - `rust-src` - A rustup component
+ - `llvm-tools-preview` - Another component, this time for bootimage
+ - `bootimage` - To link the kernel and the bootloader
  - [`qemu`](https://www.qemu.org/) - Virtualization, for testing the OS without rebooting. _(optional)_
 <!----
   - [`GRUB & grub-mkrescue`](https://git.savannah.gnu.org/cgit/grub.git/) - Building the ISO, you also need the i386 version of grub.
