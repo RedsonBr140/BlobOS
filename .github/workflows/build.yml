@@ -19,19 +19,26 @@ jobs:
 
     - name: Install Rust Nightly
       run: rustup update nightly && rustup default nightly
+
     - name: Install rust-src
       run: rustup component add rust-src --toolchain nightly
 
+    - name: Install llvm-tools-preview
+      run: rustup component add llvm-tools-preview --toolchain nightly
+
+    - name: Install bootimage
+      run: cargo install bootimage
+
     - name: Build
-      run: cargo build --verbose --target x86_64-BlobOS.json
+      run: cargo bootimage
 
     # Tests weren't implemented for now.
 
     # - name: Test
-    #   run: cargo test --verbose --target x86_64-BlobOS.json
+    #   run: cargo test --verbose
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: BlobOS.bin
-        path: target/x86_64-BlobOS/debug/blob_os
+        path: target/x86_64-BlobOS/debug/bootimage-blob_os.bin*
