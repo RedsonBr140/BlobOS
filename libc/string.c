@@ -37,3 +37,26 @@ int strcmp(const char *s1, const char *s2) {
     }
     return (*(unsigned char *)s1 < *(unsigned char *)s2) ? -1 : 1;
 }
+
+char *strcat(char *dest, const char *src) {
+    char *p = dest + strlen(dest);
+    while (*src != '\0') {
+        *p++ = *src++;
+    }
+    *p = '\0';
+    return dest;
+}
+
+char *strcpy(char *dest, const char *src) {
+    char *ptr = dest; // Store the starting address of destination string
+
+    while (*src != '\0') { // Copy each character until null character
+        *dest = *src;
+        dest++;
+        src++;
+    }
+
+    *dest = '\0'; // Add null character at the end of destination string
+
+    return ptr; // Return the starting address of destination string
+}
