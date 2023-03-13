@@ -15,7 +15,7 @@ pub extern "C" fn _start() -> ! {
     let mut writer = terminal::Writer::new();
     terminal::terminal_initialize(&mut writer);
 
-    writer.write_string("Hello, World!");
+    writer.write_string("Hello, World!\n");
 
     // We want to loop because we can't return to the bootloader
     loop {}
