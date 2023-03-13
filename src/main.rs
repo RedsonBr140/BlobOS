@@ -1,12 +1,9 @@
 #![no_std]
 #![no_main]
 
-mod vga_buffer;
+mod terminal;
 
 use core::panic::PanicInfo;
-
-use vga::colors::{Color16, TextModeColor};
-use vga::writers::{ScreenCharacter, Text80x25, TextWriter};
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -15,12 +12,11 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    let text_mode = Text80x25::new();
-    let color = TextModeColor::new(Color16::LightGrey, Color16::Black);
-    let screen_char = ScreenCharacter::new(b'H', color);
+    let mut writer = terminal::Writer::new();
+    terminal::terminal_initialize(&mut writer);
 
-    text_mode.set_mode();
-    text_mode.clear_screen();
-    text_mode.write_character(0, 0, screen_char);
+    writer.write_string("Hello, World!");
+
+    // We want to loop because we can't return to the bootloader
     loop {}
 }
