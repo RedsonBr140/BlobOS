@@ -1,3 +1,6 @@
+use core::fmt::{Arguments, Result, Write};
+use lazy_static::lazy_static;
+use spin::Mutex;
 use vga::colors::{Color16, TextModeColor};
 use vga::writers::{ScreenCharacter, Text80x25, TextWriter};
 
@@ -8,8 +11,12 @@ pub struct Writer {
     color: TextModeColor,
 }
 
+lazy_static! {
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer::new());
+}
+
 impl Writer {
-    pub fn new() -> Writer {
+    fn new() -> Writer {
         let writer = Writer {
             cursor_x_pos: 0,
             cursor_y_pos: 0,
@@ -48,7 +55,32 @@ impl Writer {
     }
 }
 
-pub fn terminal_initialize(writer: &mut Writer) {
-    writer.inner.set_mode();
-    writer.inner.clear_screen();
+impl Write for Writer {
+    fn write_str(&mut self, s: &str) -> Result {
+        self.write_string(s);
+        Ok(())
+    }
+}
+
+pub fn terminal_initialize() {
+    WRITER.lock().inner.set_mode();
+    WRITER.lock().inner.clear_screen();
+}
+
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::terminal::_print(format_args!($($arg)*)));
+}
+
+#[macro_export]
+macro_rules! println {
+    () => {
+        $crate::print!("\n")
+    };
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+
+#[doc(hidden)]
+pub fn _print(args: Arguments) {
+    WRITER.lock().write_fmt(args).unwrap();
 }
