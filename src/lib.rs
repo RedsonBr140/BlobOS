@@ -26,7 +26,7 @@ where
     fn run(&self) {
         serial_print!("{}...\t", core::any::type_name::<T>());
         self();
-        serial_println!("[ok]");
+        serial_println!("\x1b[32m[ok]\x1b[0m");
     }
 }
 
