@@ -1,4 +1,5 @@
 use core::fmt::{Arguments, Result, Write};
+use core::result::Result::Ok;
 use lazy_static::lazy_static;
 use spin::Mutex;
 use vga::colors::{Color16, TextModeColor};
@@ -83,4 +84,16 @@ macro_rules! println {
 #[doc(hidden)]
 pub fn _print(args: Arguments) {
     WRITER.lock().write_fmt(args).unwrap();
+}
+
+#[test_case]
+fn test_println() {
+    println!("Hey, it does print to the screen!");
+}
+
+#[test_case]
+fn test_println_massive() {
+    for i in 0..200 {
+        println!("Printed {i} times");
+    }
 }
