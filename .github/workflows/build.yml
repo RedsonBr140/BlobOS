@@ -30,6 +30,9 @@ jobs:
       run: cargo install bootimage
     - name: Install QEMU
       run: sudo apt install -y qemu-kvm
+      
+    - name: Cache rust
+      uses: Swatinem/rust-cache@v2
 
     - name: Build
       run: cargo bootimage
