@@ -24,9 +24,9 @@ where
     T: Fn(),
 {
     fn run(&self) {
-        serial_print!("{}...\t", core::any::type_name::<T>());
+        serial_print!("\x1b[36m{}\x1b[0m...\t", core::any::type_name::<T>());
         self();
-        serial_println!("\x1b[32m[ok]\x1b[0m");
+        serial_println!("\x1b[1;32m[ok]\x1b[0m");
     }
 }
 

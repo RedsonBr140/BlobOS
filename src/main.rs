@@ -16,12 +16,8 @@ pub extern "C" fn _start() -> ! {
 
     blob_os::init();
 
-    x86_64::instructions::interrupts::int3();
-
     #[cfg(test)]
     test_main();
-
-    println!("I'm still alive!");
 
     // We want to loop because we can't return to the bootloader
     loop {}

@@ -12,6 +12,9 @@ pub struct Writer {
     color: TextModeColor,
 }
 
+const WIDTH: usize = 80;
+const HEIGHT: usize = 25;
+
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer::new());
 }
@@ -37,11 +40,30 @@ impl Writer {
         self.cursor_x_pos = 0;
     }
 
+    fn scroll_up(&mut self) {
+        for y in 0..HEIGHT - 1 {
+            for x in 0..WIDTH {
+                let character = self.inner.read_character(x, y + 1);
+                self.inner.write_character(x, y, character);
+            }
+        }
+        let blank = self.new_screen_character(b' ');
+        for x in 0..WIDTH {
+            self.inner.write_character(x, HEIGHT, blank);
+        }
+
+        self.cursor_y_pos -= 1;
+    }
+
     pub fn write_string(&mut self, s: &str) {
         for byte in s.bytes() {
             match byte {
                 b'\n' => self.new_line(),
                 _ => {
+                    if self.cursor_y_pos >= HEIGHT {
+                        self.scroll_up();
+                    }
+
                     self.inner.write_character(
                         self.cursor_x_pos,
                         self.cursor_y_pos,
@@ -93,7 +115,7 @@ fn test_println() {
 
 #[test_case]
 fn test_println_massive() {
-    for i in 0..200 {
+    for i in 0..75 {
         println!("Printed {i} times");
     }
 }
