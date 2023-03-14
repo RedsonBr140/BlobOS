@@ -28,14 +28,14 @@ jobs:
 
     - name: Install bootimage
       run: cargo install bootimage
+    - name: Install QEMU
+      run: sudo apt install -y qemu-kvm
 
     - name: Build
       run: cargo bootimage
 
-    # Tests weren't implemented for now.
-
-    # - name: Test
-    #   run: cargo test --verbose
+    - name: Test
+      run: cargo test --verbose
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
