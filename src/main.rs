@@ -12,8 +12,8 @@ use core::panic::PanicInfo;
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     terminal::terminal_initialize();
-    println!("Welcome to BlobOS!");
 
+    println!("Welcome to BlobOS!");
     blob_os::init();
 
     #[cfg(test)]
@@ -23,15 +23,37 @@ pub extern "C" fn _start() -> ! {
     loop {}
 }
 
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    println!("Kernel Panic! {}", info);
-    loop {}
-}
-
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     blob_os::test_panic_handler(info)
+}
+
+#[cfg(not(test))]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    use vga::colors::{Color16, TextModeColor};
+    terminal::WRITER
+        .lock()
+        .clear_screen(TextModeColor::new(Color16::LightGrey, Color16::Blue));
+    for _ in 0..(80 * 25) {
+        print!("{}", ' ');
+    }
+    terminal::WRITER.lock().reset_cursor();
+
+    println!(
+        r#"
+         _______
+        |.-----.|
+        ||x . x||
+        ||_.-._||
+        `--)-(--`
+       __[=== o]___
+      |:::::::::::|\
+      `-=========-`()
+    "#
+    );
+
+    println!("Kernel Panic! {}", info);
+    loop {}
 }

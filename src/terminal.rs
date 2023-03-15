@@ -76,6 +76,18 @@ impl Writer {
                 .set_cursor_position(self.cursor_x_pos, self.cursor_y_pos);
         }
     }
+
+    pub fn clear_screen(&mut self, color: TextModeColor) {
+        self.color = color;
+        self.inner.clear_screen();
+        self.color = color;
+    }
+    pub fn reset_cursor(&mut self) {
+        self.cursor_x_pos = 0;
+        self.cursor_y_pos = 0;
+        self.inner
+            .set_cursor_position(self.cursor_x_pos, self.cursor_y_pos);
+    }
 }
 
 impl Write for Writer {
