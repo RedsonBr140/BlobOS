@@ -17,6 +17,7 @@ bootloader = "0.9.23"
 spin = "0.9.5"
 uart_16550 = "0.2.18"
 vga = "0.2.8"
+volatile = "0.4.6"
 x86_64 = "0.14.10"
 
 [dependencies.lazy_static]
@@ -26,6 +27,7 @@ features = ["spin_no_std"]
 [[test]]
 name = "should_panic"
 harness = false
+
 [[test]]
-name = "breakpoint_exception"
+name = "stack_overflow"
 harness = false

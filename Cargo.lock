@@ -29,6 +29,7 @@ dependencies = [
  "spin 0.9.5",
  "uart_16550",
  "vga",
+ "volatile",
  "x86_64",
 ]
 

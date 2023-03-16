@@ -10,8 +10,10 @@ use core::panic::PanicInfo;
 pub mod interrupts;
 pub mod serial;
 pub mod terminal;
+pub mod gdt;
 
 pub fn init() {
+    gdt::init();
     interrupts::init_idt();
 }
 
