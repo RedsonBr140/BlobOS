@@ -7,14 +7,24 @@
 
 use core::panic::PanicInfo;
 
-pub mod interrupts;
+use x86_64::instructions;
+
+pub mod cpu;
+pub mod int_handlers;
 pub mod serial;
 pub mod terminal;
-pub mod gdt;
 
 pub fn init() {
-    gdt::init();
-    interrupts::init_idt();
+    cpu::gdt::init();
+    cpu::interrupts::init_idt();
+    unsafe { cpu::interrupts::PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
+}
+
+pub fn hlt_loop() -> ! {
+    loop {
+        instructions::hlt();
+    }
 }
 
 pub trait Testable {
@@ -60,7 +70,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]
@@ -68,7 +78,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     init();
     test_main();
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]

@@ -4,6 +4,7 @@ use lazy_static::lazy_static;
 use spin::Mutex;
 use vga::colors::{Color16, TextModeColor};
 use vga::writers::{ScreenCharacter, Text80x25, TextWriter};
+use x86_64::instructions::interrupts;
 
 pub struct Writer {
     inner: Text80x25,
@@ -117,7 +118,9 @@ macro_rules! println {
 
 #[doc(hidden)]
 pub fn _print(args: Arguments) {
-    WRITER.lock().write_fmt(args).unwrap();
+    interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+    })
 }
 
 #[test_case]

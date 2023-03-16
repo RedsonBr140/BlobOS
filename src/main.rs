@@ -9,18 +9,19 @@ mod terminal;
 
 use core::panic::PanicInfo;
 
+use blob_os::hlt_loop;
+
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     terminal::terminal_initialize();
-    println!("Welcome to BlobOS!");
-
     blob_os::init();
+
+    println!("Welcome to BlobOS!");
 
     #[cfg(test)]
     test_main();
 
-    // We want to loop because we can't return to the bootloader
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]
@@ -55,5 +56,5 @@ fn panic(info: &PanicInfo) -> ! {
     );
 
     println!("Kernel Panic! {}", info);
-    loop {}
+    hlt_loop();
 }

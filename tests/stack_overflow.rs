@@ -13,7 +13,7 @@ lazy_static! {
         unsafe {
             idt.double_fault
                 .set_handler_fn(test_double_fault_handler)
-                .set_stack_index(blob_os::gdt::DOUBLE_FAULT_IST_INDEX);
+                .set_stack_index(blob_os::cpu::gdt::DOUBLE_FAULT_IST_INDEX);
         }
 
         idt
@@ -23,7 +23,7 @@ lazy_static! {
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     serial_print!("\x1b[36mshould_panic::should_fail\x1b[0m...\t");
-    blob_os::gdt::init();
+    blob_os::cpu::gdt::init();
     init_test_idt();
 
     stack_overflow();
