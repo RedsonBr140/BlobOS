@@ -1,4 +1,5 @@
 use crate::cpu::gdt;
+use crate::int_handlers::page_fault::page_fault_handler;
 use crate::int_handlers::ps2kbd::kbd_handler;
 use crate::int_handlers::timer::timer_input_handler;
 use crate::println;
@@ -43,6 +44,7 @@ lazy_static! {
                 .set_handler_fn(double_fault_handler)
                 .set_stack_index(gdt::DOUBLE_FAULT_IST_INDEX);
         }
+        idt.page_fault.set_handler_fn(page_fault_handler);
         idt[InterruptIndex::Timer.as_usize()].set_handler_fn(timer_input_handler);
         idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(kbd_handler);
         idt
