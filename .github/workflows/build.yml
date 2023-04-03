@@ -31,7 +31,9 @@ jobs:
     - name: Install bootimage
       run: cargo install bootimage
     - name: Install QEMU
-      run: sudo apt install -y qemu-kvm
+      run: |
+        sudo apt update
+        sudo apt install -y qemu-kvm
       
 
     - name: Build
