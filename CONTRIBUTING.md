@@ -3,11 +3,11 @@
 ## Code formatting
 
 Try to follow the existing formatting.
-If there is no existing formatting, you may use `rustfmt`.
+If there is no existing formatting, you may use `clang-format` with our included `.clang-format` configuration.
 
 In general, in order of importance:
 
-- Make sure your IDE is not messing up line endings or whitespace.
+- Make sure your IDE is not messing up line endings or whitespace and avoid using linters.
 - Keep to the existing formatting.
 - Indent with 4 space.
 
