@@ -1,4 +1,4 @@
-> :warning: **Rewriting!** The project is transitioning to Rust now.
+> :warning: **Rewriting!** The project is transitioning to **C++** now.
 
 <p align="center">
   <img src="docs/assets/BlobOS_without_border.png" width="128" height="128"/>
@@ -8,6 +8,7 @@
 ## 💡 About
 The point with this project is to learn about operating systems and computers, I don't want to create something huge.
 
+<!---
 ## 🚀 Setup
 ### 🧾 Dependencies
  - [`rustup`](https://rustup.rs/) - Installer for the Rust programming language.
@@ -31,3 +32,4 @@ cargo bootimage # Build with --release if you want
 dd if=target/x86_64-BlobOS/debug/bootimage-blob_os.bin of=/dev/yourFlashDrive status=progress
 ```
 > ⚠️ dd is a dangerous command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
+-->
