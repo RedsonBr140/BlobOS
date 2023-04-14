@@ -4,10 +4,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <Kernel/LibK/stdio.hpp>
+#include <Kernel/LibK/stdio.h>
 #include <Kernel/LibK/stdlib.h>
 #include <Kernel/LibK/string.h>
 
+extern "C" {
 typedef void (*formatter_t)(va_list *);
 
 struct FormatterMap {
@@ -26,8 +27,10 @@ static void format_string(va_list *args) {
     char *s = va_arg(*args, char *);
     term.WriteString(s);
 }
-/*
+
 static void format_decimal(va_list *args) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
+
     char buffer[32];
     int num = va_arg(*args, int);
     itoa(num, buffer, 10);
@@ -35,6 +38,8 @@ static void format_decimal(va_list *args) {
 }
 
 static void format_hexa(va_list *args) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
+
     char buffer[sizeof(void *) + 2];
     char prefix[] = "0x";
     size_t prefix_length = strlen(prefix);
@@ -48,11 +53,11 @@ static void format_hexa(va_list *args) {
     memcpy(buffer, prefix, prefix_length);
 
     term.WriteString(buffer);
-}*/
+}
 
 static void format_color(va_list *args) {
     TextMode::Terminal term = *Kernel::GetMainTerminal();
-    enum TextMode::Color colors = va_arg(*args, enum TextMode::Color);
+    enum TextMode::Color colors = va_arg(*args, TextMode::Color);
 
     // TODO: Don't hardcode the background
     term.SetColor(colors, TextMode::Color::BLACK);
@@ -60,9 +65,8 @@ static void format_color(va_list *args) {
 
 // FIXME: When we get an STL, use std::map instead of this hack.
 static const FormatterMap FORMATTERS[256] = {
-    {'c', format_char},
-    {'s', format_string}, /* {'d', format_decimal}, */
-    /* {'p', format_hexa}, */ {'a', format_color},
+    {'c', format_char}, {'s', format_string}, {'d', format_decimal},
+    {'p', format_hexa}, {'a', format_color},
 };
 
 void k_printf(const char *format, ...) {
@@ -94,4 +98,5 @@ void k_printf(const char *format, ...) {
 
 void k_printok(const char *message) {
     k_printf("[%aOK%a] %s\n", TextMode::Color::RESET, message);
+}
 }
