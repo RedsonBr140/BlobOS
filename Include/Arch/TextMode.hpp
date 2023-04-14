@@ -25,6 +25,9 @@ enum class Color : uint8_t {
     LIGHT_MAGENTA,
     LIGHT_BROWN,
     WHITE,
+
+    // I'm a lazy boy
+    RESET = LIGHT_GREY
 };
 
 class Terminal {
@@ -36,6 +39,7 @@ class Terminal {
     void SetColor(enum Color fg, enum Color bg);
     void Write(const char *data, size_t size);
     void WriteString(const char *data);
+    void PutChar(char c);
 
   private:
     size_t terminalRow;
@@ -49,6 +53,5 @@ class Terminal {
     static uint16_t vgaEntry(unsigned char uc, uint8_t color);
     void putEntryAt(char c, uint8_t color, size_t x, size_t y);
     void scroll(void);
-    void putChar(char c);
 };
 } // namespace TextMode

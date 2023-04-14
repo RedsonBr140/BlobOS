@@ -16,20 +16,22 @@ struct FormatterMap {
 };
 
 static void format_char(va_list *args) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
     char c = va_arg(*args, int);
-    Kernel::terminal.putChar(c);
+    term.PutChar(c);
 }
 
 static void format_string(va_list *args) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
     char *s = va_arg(*args, char *);
-    Kernel::terminal.WriteString(s);
+    term.WriteString(s);
 }
 /*
 static void format_decimal(va_list *args) {
     char buffer[32];
     int num = va_arg(*args, int);
     itoa(num, buffer, 10);
-    Kernel::terminal.WriteString(buffer);
+    term.WriteString(buffer);
 }
 
 static void format_hexa(va_list *args) {
@@ -45,14 +47,15 @@ static void format_hexa(va_list *args) {
     memmove(buffer + prefix_length, buffer, buf_length);
     memcpy(buffer, prefix, prefix_length);
 
-    Kernel::terminal.WriteString(buffer);
+    term.WriteString(buffer);
 }*/
 
 static void format_color(va_list *args) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
     enum TextMode::Color colors = va_arg(*args, enum TextMode::Color);
 
     // TODO: Don't hardcode the background
-    Kernel::terminal.SetColor(colors, TextMode::Color::BLACK);
+    term.SetColor(colors, TextMode::Color::BLACK);
 }
 
 // FIXME: When we get an STL, use std::map instead of this hack.
@@ -63,6 +66,7 @@ static const FormatterMap FORMATTERS[256] = {
 };
 
 void k_printf(const char *format, ...) {
+    TextMode::Terminal term = *Kernel::GetMainTerminal();
     va_list args;
     va_start(args, format);
 
@@ -77,11 +81,11 @@ void k_printf(const char *format, ...) {
             if (formatter != nullptr) {
                 formatter(&args);
             } else {
-                Kernel::terminal.putChar('%');
-                Kernel::terminal.putChar(*p);
+                term.PutChar('%');
+                term.PutChar(*p);
             }
         } else {
-            Kernel::terminal.putChar(*p);
+            term.PutChar(*p);
         }
     }
 

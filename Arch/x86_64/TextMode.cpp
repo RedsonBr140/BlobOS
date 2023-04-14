@@ -1,8 +1,10 @@
 #include <Arch/TextMode.hpp>
 #include <Kernel/IOPorts.hpp>
+#include <LibK/string.h>
+#include <stddef.h>
 #include <stdint.h>
 
-// FIXME: When are we gonna get an STL, bro?
+// FIXME: Fix LibK and use it instead
 size_t strlen(const char *str) {
     size_t len = 0;
     while (str[len])
@@ -93,7 +95,7 @@ void Terminal::scroll(void) {
     }
 }
 
-void Terminal::putChar(char c) {
+void Terminal::PutChar(char c) {
     if (c == '\n') {
         if (this->terminalRow + 1 == VGA_HEIGHT) {
             this->scroll();
@@ -126,7 +128,7 @@ void Terminal::putChar(char c) {
 
 void Terminal::Write(const char *data, size_t size) {
     for (size_t i = 0; i < size; i++)
-        this->putChar(data[i]);
+        this->PutChar(data[i]);
 }
 
 void Terminal::WriteString(const char *data) {
