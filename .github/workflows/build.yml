@@ -20,8 +20,8 @@ jobs:
 
     - name: Build
       run: |
-        cmake -S . -B build -G Ninja
-        cmake --build build/
+        cmake -S . -B build
+        cmake --build build/ -- -j$(nproc)
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
