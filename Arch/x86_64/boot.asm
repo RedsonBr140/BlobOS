@@ -41,7 +41,9 @@ _start:
 
 	; note, that if you are building on Windows, C functions may have "_" prefix in assembly: _kernel_main
 	extern Kmain
+	extern ArchInit
 	; EBX holds the pointer to the Multiboot info structure.
+	call ArchInit
 	push ebx
 	call Kmain
 	add esp, 8

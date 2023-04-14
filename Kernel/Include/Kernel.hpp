@@ -2,6 +2,6 @@
 #include <TextMode.hpp>
 
 namespace Kernel {
-extern TextMode::Terminal terminal;
+TextMode::Terminal *GetMainTerminal();
 extern "C" void Panic(char *PanicMessage);
 }; // namespace Kernel

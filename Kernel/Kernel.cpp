@@ -3,8 +3,10 @@
 #include <TextMode.hpp>
 #include <multiboot.h>
 
+TextMode::Terminal *termptr;
+
 namespace Kernel {
-TextMode::Terminal terminal;
+TextMode::Terminal *GetMainTerminal() { return termptr; }
 extern "C" void Panic(char *PanicMessage) {
     TextMode::Terminal panicTerminal;
 
@@ -28,8 +30,11 @@ extern "C" void Panic(char *PanicMessage) {
 }; // namespace Kernel
 
 extern "C" void Kmain(multiboot_info_t mb_header) {
-    Kernel::terminal.SetColor(TextMode::Color::LIGHT_GREY,
-                              TextMode::Color::BLACK);
-    Kernel::terminal.Clear();
-    k_printf("Welcome to BlobOS!\n");
+    TextMode::Terminal terminal;
+    termptr = &terminal;
+
+    terminal.SetColor(TextMode::Color::LIGHT_GREY, TextMode::Color::BLACK);
+    terminal.Clear();
+
+    terminal.WriteString("Welcome to BlobOS!\n");
 }
