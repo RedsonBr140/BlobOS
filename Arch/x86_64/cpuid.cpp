@@ -1,8 +1,8 @@
-#include "Kernel.hpp"
-#include "TextMode.hpp"
+#include <Arch/TextMode.hpp>
+#include <Kernel/Kernel.hpp>
 #include <cpuid.h>
 
-#include "cpuid.hpp"
+#include "Arch/x86_64/cpuid.hpp"
 
 bool x86_64::hasCPUID() {
     int cpuid_supported;

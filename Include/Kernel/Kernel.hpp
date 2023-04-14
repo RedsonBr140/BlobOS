@@ -1,5 +1,5 @@
 #pragma once
-#include <TextMode.hpp>
+#include <Arch/TextMode.hpp>
 
 namespace Kernel {
 TextMode::Terminal *GetMainTerminal();

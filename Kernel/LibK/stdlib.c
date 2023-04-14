@@ -1,4 +1,4 @@
-#include "Include/stdlib.h"
+#include <LibK/stdlib.h>
 
 char *itoa(int value, char *buffer, int base) {
     const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";

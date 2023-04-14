@@ -1,12 +1,12 @@
-#include <Kernel.hpp>
-#include <TextMode.hpp>
+#include <Arch/TextMode.hpp>
+#include <Kernel/Kernel.hpp>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 
-#include "Include/stdio.hpp"
-#include "Include/stdlib.h"
-#include "Include/string.h"
+#include <LibK/stdio.hpp>
+#include <LibK/stdlib.h>
+#include <LibK/string.h>
 
 typedef void (*formatter_t)(va_list *);
 

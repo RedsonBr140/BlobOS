@@ -1,7 +1,7 @@
-#include "KLibc/Include/stdio.hpp"
-#include <Kernel.hpp>
-#include <TextMode.hpp>
-#include <multiboot.h>
+#include <Arch/TextMode.hpp>
+#include <Arch/multiboot.h>
+#include <Kernel/Kernel.hpp>
+#include <LibK/stdio.hpp>
 
 TextMode::Terminal *termptr;
 

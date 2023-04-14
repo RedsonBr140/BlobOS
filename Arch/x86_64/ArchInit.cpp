@@ -1,7 +1,6 @@
-#include <Kernel.hpp>
-#include <TextMode.hpp>
+#include <Arch/x86_64/cpuid.hpp>
+#include <Kernel/Kernel.hpp>
 
-#include "cpuid.hpp"
 extern "C" void ArchInit() {
     TextMode::Terminal terminal = *Kernel::GetMainTerminal();
     terminal.SetColor(TextMode::Color::CYAN, TextMode::Color::BLACK);

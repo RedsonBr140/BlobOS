@@ -1,5 +1,5 @@
-#include <IOPorts.hpp>
-#include <TextMode.hpp>
+#include <Arch/TextMode.hpp>
+#include <Kernel/IOPorts.hpp>
 #include <stdint.h>
 
 // FIXME: When are we gonna get an STL, bro?

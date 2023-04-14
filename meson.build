@@ -11,15 +11,17 @@ cpp_flags = ['-c', '-W', '-Wall', '-Wextra', '-std=c++17', '-mno-sse', '-g', glo
 link_args = ['-T', f'@source_root@/Arch/x86_64/linker.ld', '-nostdlib', '-z', 'noexecstack', global_flags]
 nasm_flags = ['-f', 'elf32']
 
-# kernel_inc, kernel_sources
+# kernel_sources
 subdir('Kernel')
-# arch_inc, arch_sources, x86_64_inc
+# arch_inc, arch_sources
 subdir('Arch')
+
+inc_dir = include_directories('Include')
 
 binary = executable('BlobOS.bin',
   sources: [ arch_sources, kernel_sources ],
   link_args: link_args,
   cpp_args : cpp_flags,
   nasm_args: nasm_flags,
-  include_directories: [ arch_inc, kernel_inc, x86_64_inc ]
+  include_directories: [ inc_dir ]
 )

@@ -3,4 +3,4 @@ kernel_sources = [
   'Kernel/IOPorts.cpp'
 ]
 
-kernel_inc = include_directories('Include')
+subdir('LibK')
