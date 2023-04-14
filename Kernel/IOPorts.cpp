@@ -1,6 +1,6 @@
-#include "include/io_ports.h"
 #include <stdint.h>
 
+namespace IOPorts {
 void outb(uint16_t port, uint8_t val) {
     asm volatile("outb %0, %1" : : "a"(val), "Nd"(port));
 }
@@ -14,4 +14,6 @@ uint8_t inb(uint16_t port) {
 
 // Wait a very small amount of time (1 to 4 microseconds, generally).
 // Note that it's an imprecise wait.
-void io_wait(void) { outb(0x80, 0); }
+void IOWait(void) { outb(0x80, 0); }
+
+} // namespace IOPorts
