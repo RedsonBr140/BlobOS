@@ -1,5 +1,6 @@
 #include <Kernel/LibK/stdlib.h>
 
+extern "C" {
 char *itoa(int value, char *buffer, int base) {
     const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
     char *ptr = buffer;
@@ -36,4 +37,5 @@ char *itoa(int value, char *buffer, int base) {
     }
 
     return buffer;
+}
 }

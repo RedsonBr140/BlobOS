@@ -3,6 +3,7 @@
 
 #include "Kernel/LibK/string.h"
 
+extern "C" {
 size_t strlen(const char *str) {
     size_t len = 0;
     while (str[len])
@@ -11,8 +12,8 @@ size_t strlen(const char *str) {
 }
 
 void *memcpy(void *dest, const void *src, size_t size) {
-    char *d = dest;
-    const char *s = src;
+    char *d = static_cast<char *>(dest);
+    const char *s = static_cast<const char *>(src);
 
     while (size--) {
         *d++ = *s++;
@@ -66,4 +67,5 @@ char *strcpy(char *dest, const char *src) {
     *dest = '\0'; // Add null character at the end of destination string
 
     return ptr; // Return the starting address of destination string
+}
 }
