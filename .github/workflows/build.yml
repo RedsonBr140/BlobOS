@@ -1,0 +1,42 @@
+name: Build BlobOS
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y grub-common mtools nasm
+
+    - name: Install Meson      
+      run: pip install meson ninja
+
+    - name: Build
+      env:
+        NASM: nasm
+        CC: gcc
+      run: |
+        meson setup build
+        ninja -C build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: BlobOS_BIN
+        path: build/BlobOS.bin # Change this to the path of your OS build artifacts
