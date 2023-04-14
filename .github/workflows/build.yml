@@ -13,26 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
-
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y grub-common mtools nasm
-
-    - name: Install Meson      
-      run: pip install meson ninja
+        sudo apt-get install -y grub-common mtools nasm cmake
 
     - name: Build
-      env:
-        NASM: nasm
-        CC: gcc
       run: |
-        meson setup build
-        ninja -C build
+        cmake -S . -B build -G Ninja
+        cmake --build build/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
