@@ -1,7 +1,8 @@
 #include <Arch/TextMode.hpp>
 #include <Arch/multiboot.h>
 #include <Kernel/Kernel.hpp>
-#include <LibK/stdio.hpp>
+
+#include <Kernel/LibK/stdio.hpp>
 
 TextMode::Terminal *termptr;
 
@@ -37,4 +38,5 @@ extern "C" void Kmain(multiboot_info_t mb_header) {
     terminal.Clear();
 
     terminal.WriteString("Welcome to BlobOS!\n");
+    k_printf("CHORE!");
 }

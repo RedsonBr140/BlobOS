@@ -9,12 +9,12 @@ set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/Arch/x86_64/linker.ld")
 set(CMAKE_EXE_LINKER_FLAGS "-nostdlib -z noexecstack -T ${LINKER_SCRIPT}")
 
 # Add include directories
-set(GLOBAL_INC_DIR "${CMAKE_SOURCE_DIR}/Include")
+set(GLOBAL_INC_DIR ".")
 include_directories(${GLOBAL_INC_DIR})
 
 file(GLOB_RECURSE ARCH_SOURCES "Arch/x86_64/*.cpp" "Arch/x86_64/*.asm")
 file(GLOB_RECURSE KERNEL_SOURCES "Kernel/*.cpp")
-file(GLOB_RECURSE LIBC_SOURCES "Kernel/KLibc/*.cpp" "Kernel/KLibc/*.c")
+file(GLOB_RECURSE LIBK_SOURCES "Kernel/LibK/*.cpp" "Kernel/LibK/*.c")
 file(GLOB_RECURSE ARCH_32BIT_SOURCES "Arch/x86_64/32bit*.asm")
 
 # Remove 32-bit sources from ARCH_SOURCES
@@ -27,7 +27,10 @@ endforeach()
 add_library(ARCH_32BIT_SOURCES_LIB STATIC ${ARCH_32BIT_SOURCES})
 set_target_properties(ARCH_32BIT_SOURCES_LIB PROPERTIES COMPILE_FLAGS "-f elf32")
 
+add_library(LIBK STATIC ${LIBK_SOURCES})
+
 set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> <FLAGS> -o <OBJECT> <SOURCE>")
 
 add_executable(BlobOS.bin ${ARCH_SOURCES} ${KERNEL_SOURCES})
 target_link_libraries(BlobOS.bin ARCH_32BIT_SOURCES_LIB)
+target_link_libraries(BlobOS.bin LIBK)

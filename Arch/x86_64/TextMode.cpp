@@ -1,10 +1,9 @@
+#include "Kernel/LibK/string.h"
 #include <Arch/TextMode.hpp>
 #include <Kernel/IOPorts.hpp>
-#include <LibK/string.h>
 #include <stddef.h>
 #include <stdint.h>
 
-// FIXME: Fix LibK and use it instead
 size_t strlen(const char *str) {
     size_t len = 0;
     while (str[len])

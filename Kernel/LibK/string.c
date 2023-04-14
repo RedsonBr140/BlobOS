@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "LibK/string.h"
+#include "Kernel/LibK/string.h"
 
 size_t strlen(const char *str) {
     size_t len = 0;

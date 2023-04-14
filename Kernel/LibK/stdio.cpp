@@ -4,9 +4,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <LibK/stdio.hpp>
-#include <LibK/stdlib.h>
-#include <LibK/string.h>
+#include <Kernel/LibK/stdio.hpp>
+#include <Kernel/LibK/stdlib.h>
+#include <Kernel/LibK/string.h>
 
 typedef void (*formatter_t)(va_list *);
 
