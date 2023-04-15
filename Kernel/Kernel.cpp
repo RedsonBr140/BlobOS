@@ -1,5 +1,5 @@
 #include <Arch/TextMode.hpp>
-#include <Arch/multiboot.h>
+#include <Arch/multiboot2.h>
 #include <Kernel/Kernel.hpp>
 
 #include <Kernel/LibK/stdio.h>
@@ -30,7 +30,7 @@ extern "C" void Panic(char *PanicMessage) {
 }
 }; // namespace Kernel
 
-extern "C" void Kmain(multiboot_info_t mb_header) {
+extern "C" void Kmain() {
     TextMode::Terminal terminal;
     termptr = &terminal;
 

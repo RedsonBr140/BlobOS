@@ -1,21 +1,20 @@
 [bits 32]
-; Declare constants for the multiboot header.
-MBALIGN  equ  1 << 0			; align loaded modules on page boundaries
-MEMINFO  equ  1 << 1			; provide memory map
-MBFLAGS  equ  MBALIGN | MEMINFO ; this is the Multiboot 'flag' field
-MAGIC	 equ  0x1BADB002		; 'magic number' lets bootloader find the header
-CHECKSUM equ -(MAGIC + MBFLAGS)   ; checksum of above, to prove we are multiboot
-
-; Declare a multiboot header that marks the program as a kernel. These are magic
-; values that are documented in the multiboot standard. The bootloader will
-; search for this signature in the first 8 KiB of the kernel file, aligned at a
-; 32-bit boundary. The signature is in its own section so the header can be
-; forced to be within the first 8 KiB of the kernel file.
-section .multiboot
+%define HEADER_LENGTH header_end - header_start
+%define MAGIC 0xe85250d6
+%define CHECKSUM 0x100000000 -(MAGIC + 0 + (HEADER_LENGTH))
+section .multiboot2
 align 4
-	dd MAGIC
-	dd MBFLAGS
-	dd CHECKSUM
+header_start:
+	dd MAGIC ; The Multiboot 2 Magic number
+	dd 0 ; 32-bit Protected Mode (Architecture)
+	dd HEADER_LENGTH
+	dd CHECKSUM ; Proving that we're who we're.
+
+	dw 0
+	dw 0
+	dd 8
+
+header_end:
 
 global _start:function (_start.end - _start)
 global _ClearTables
