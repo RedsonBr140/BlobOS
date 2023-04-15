@@ -45,7 +45,7 @@ static void format_hexa(va_list *args) {
     size_t prefix_length = strlen(prefix);
 
     void *pointer = va_arg(*args, void *);
-    itoa((int)&pointer, buffer, 16);
+    itoa((uintptr_t)&pointer, buffer, 16);
 
     // Shift buffer to the right by two bytes
     size_t buf_length = strlen(buffer);
@@ -97,6 +97,7 @@ void k_printf(const char *format, ...) {
 }
 
 void k_printok(const char *message) {
-    k_printf("[%aOK%a] %s\n", TextMode::Color::RESET, message);
+    k_printf("%a[OK]%a %s\n", TextMode::Color::LIGHT_CYAN,
+             TextMode::Color::RESET, message);
 }
 }
