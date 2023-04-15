@@ -24,23 +24,26 @@ global _EnablePAE
 global _LongMode
 global _EnablePaging
 
+%include "Arch/x86_64/gdt.asm"
 
 ; note, that if you are building on Windows, C functions may have "_" prefix in assembly: _kernel_main
-extern Kmain
 extern ArchInit
-
-;%include "Arch/x86_64/gdt.asm"
+extern Realm64
 
 section .text
+bits 32
 _start:
 	mov esp, stack_top ; Set the esp register to the top of the stack, as it grows downwards.
 
 	call ArchInit
+	lgdt [gdt_descriptor]
+	jmp 0x08:Realm64
 
 	; EBX holds the pointer to the Multiboot info structure.
-	push ebx
-	call Kmain
-	add esp, 8
+	;push ebx
+	;call Kmain
+	;add esp, 8
+
 .hang: 
 	hlt
 	jmp .hang
