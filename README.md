@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="docs/assets/BlobOS_without_border.png" width="128" height="128"/>
 </p>
@@ -19,15 +18,20 @@ Option 1: Using `qemu`:
 ```sh
 git clone https://github.com/RedsonBr140/BlobOS.git
 cd BlobOS
-meson setup build # Create the build directory
-meson compile -C build run.bin # Runs the BIN file in qemu.
+git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
+make -C limine/
+cmake -S . -B build # Create the build directory
+cmake --build build # Builds the project
+qemu-system-x86_64 -cdrom build/BlobOS.iso -enable-kvm # Runs the project
 ```
 Option 2: Real hardware:
 ```sh
 git clone https://github.com/RedsonBr140/BlobOS.git
 cd BlobOS
-meson setup build # Create the build directory
-meson compile -C build # Compile the project.
+git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
+make -C limine/
+cmake -S . -B build # Create the build directory
+cmake --build build # Builds the project
 dd if=build/BlobOS.iso of=/dev/yourFlashDrive status=progress
 ```
 > ⚠️ dd is a dangerous command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
