@@ -27,14 +27,15 @@ target_link_libraries(BlobOS.bin LIBK)
 # Ensure that build/iso_root directory exists
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/iso_root)
 
-add_custom_command(
-    TARGET BlobOS.bin
-    POST_BUILD
+set(ISO_IMAGE ${PROJECT_NAME}.iso)
+add_custom_command(OUTPUT ${ISO_IMAGE} DEPENDS BlobOS.bin
     COMMAND ${CMAKE_COMMAND} -E echo "======== Post Build ========"
     COMMAND cp ${CMAKE_SOURCE_DIR}/build/BlobOS.bin ${CMAKE_SOURCE_DIR}/Arch/limine.cfg ${CMAKE_SOURCE_DIR}/limine/limine.sys ${CMAKE_SOURCE_DIR}/build/iso_root/
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/limine/limine-cd.bin ${CMAKE_SOURCE_DIR}/limine/limine-cd-efi.bin ${CMAKE_SOURCE_DIR}/build/iso_root/
     # Build BlobOS.iso
-    COMMAND xorriso -as mkisofs -b limine-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table --efi-boot limine-cd-efi.bin -efi-boot-part --efi-boot-image --protective-msdos-label -o ${CMAKE_SOURCE_DIR}/build/BlobOS.iso ${CMAKE_SOURCE_DIR}/build/iso_root/
+    COMMAND xorriso -as mkisofs -b limine-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table --efi-boot limine-cd-efi.bin -efi-boot-part --efi-boot-image --protective-msdos-label -o ${CMAKE_SOURCE_DIR}/build/${ISO_IMAGE} ${CMAKE_SOURCE_DIR}/build/iso_root/
 
-    COMMAND ${CMAKE_SOURCE_DIR}/limine/limine-deploy ${CMAKE_SOURCE_DIR}/build/BlobOS.iso
+    COMMAND ${CMAKE_SOURCE_DIR}/limine/limine-deploy ${CMAKE_SOURCE_DIR}/build/${ISO_IMAGE}
 )
+
+add_custom_target(iso ALL DEPENDS ${ISO_IMAGE})
