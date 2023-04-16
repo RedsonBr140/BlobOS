@@ -1,5 +1,6 @@
 #include <Arch/TextMode.hpp>
 #include <Arch/multiboot2.h>
+#include <Arch/x86_64/Interrupts/IDT.h>
 #include <Kernel/Kernel.hpp>
 
 #include <Kernel/LibK/stdio.h>
@@ -37,5 +38,11 @@ extern "C" void Kmain() {
     terminal.SetColor(TextMode::Color::LIGHT_GREY, TextMode::Color::BLACK);
     terminal.Clear();
 
-    k_printf("Welcome to BlobOS!\n");
+    terminal.WriteString("Welcome to BlobOS!\n");
+
+    idtInit();
+
+    if (!areInterruptsEnabled()) {
+        enableInterrupts();
+    }
 }

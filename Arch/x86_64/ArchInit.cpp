@@ -1,3 +1,4 @@
+#include <Arch/x86_64/Interrupts/IDT.h>
 #include <Arch/x86_64/cpuid.hpp>
 #include <Kernel/IOPorts.hpp>
 #include <Kernel/Kernel.hpp>
