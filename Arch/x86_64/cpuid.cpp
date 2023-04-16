@@ -10,7 +10,7 @@ bool x86_64::hasCPUID() {
     // Check if CPUID is supported
     cpuid_supported = __get_cpuid_max(0, nullptr);
     if (cpuid_supported == 0) {
-        Kernel::Panic((char *)"CPUID not Supported!");
+        PANIC("CPUID not Supported!");
         return false;
     }
 
@@ -24,7 +24,7 @@ bool x86_64::SupportsLongMode() {
     if (edx & (1 << 29)) {
         return true;
     } else {
-        Kernel::Panic((char *)"Long mode not supported!");
+        PANIC("Long mode not supported!");
     }
     return false;
 }
