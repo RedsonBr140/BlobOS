@@ -10,7 +10,6 @@ The point with this project is to learn about operating systems and computers, I
 ### 🧾 Dependencies
  - [`nasm`](https://nasm.us/) - Assembler, you need for build the OS.
  - [`qemu`](https://www.qemu.org/) - Virtualization, for testing the OS without rebooting. _(optional)_
-  - [`GRUB & grub-mkrescue`](https://git.savannah.gnu.org/cgit/grub.git/) - Building the ISO, you also need the i386 version of grub.
 
 ### 🔧 Testing
 
