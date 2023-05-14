@@ -1,3 +1,4 @@
+#include "Kernel/SerialPorts.hpp"
 #include <Arch/TextMode.hpp>
 #include <Arch/multiboot2.h>
 #include <Arch/x86_64/Interrupts/IDT.h>
@@ -43,6 +44,7 @@ extern "C" void Panic(const char *PanicMessage, const char *file,
 
 extern "C" void Kmain() {
     TextMode::Terminal terminal;
+    SerialPort serial(COM1_BASE);
     termptr = &terminal;
 
     terminal.SetColor(TextMode::Color::LIGHT_GREY, TextMode::Color::BLACK);
@@ -50,8 +52,8 @@ extern "C" void Kmain() {
 
     idtInit();
     if (!areInterruptsEnabled()) {
-        enableInterrupts();
+        //       enableInterrupts();
     }
-
+    serial.WriteString("Your kinda funny dude\n\na");
     terminal.WriteString("Welcome to BlobOS!\n");
 }

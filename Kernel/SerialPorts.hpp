@@ -16,6 +16,7 @@ class SerialPort {
   private:
     const uint16_t data_port_;
     const uint16_t status_port_;
+    bool enabled = false;
 };
 
 // Define the COM1 base address

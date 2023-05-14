@@ -1,4 +1,4 @@
-#include "Kernel/LibK/string.h"
+#include <Kernel/LibK/string.h>
 #include <Arch/TextMode.hpp>
 #include <Kernel/IOPorts.hpp>
 #include <stddef.h>
@@ -32,10 +32,13 @@ void Terminal::SetColor(enum Color fg, enum Color bg) {
 void Terminal::updateCursor(int x, int y) {
     uint16_t position = y * VGA_WIDTH + x;
 
-    IOPorts::outb(0x3D4, 0x0F);
-    IOPorts::outb(0x3D5, (uint8_t)(position & 0xFF));
-    IOPorts::outb(0x3D4, 0x0E);
-    IOPorts::outb(0x3D5, (uint8_t)((position >> 8) & 0xFF));
+    Port VGAIndex(0x3D4);
+    Port VGAData(0x3D5);
+
+    VGAIndex.Write(0x0F);
+    VGAData.Write((uint8_t)(position & 0xFF));
+    VGAIndex.Write(0x0E);
+    VGAData.Write((uint8_t)((position >> 8) & 0xFF));
 }
 
 uint8_t Terminal::vgaEntryColor(enum Color fg, enum Color bg) {
