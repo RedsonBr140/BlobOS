@@ -5,6 +5,8 @@ override MAKEFLAGS += -rR
 
 override KERNEL := BlobOS.elf
 
+GIT_VERSION := $(shell git --no-pager describe --tags --always --dirty)
+
 # Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =
     ifeq ($(origin $1),default)
@@ -54,7 +56,8 @@ override CFLAGS += \
     -mno-sse2 \
     -mno-red-zone \
     -I Include/ \
-    -I ../../Include/
+    -I ../../Include/ \
+    -DGIT_VERSION=\"$(GIT_VERSION)\"
 
 override LDFLAGS :=	\
 	-nostdlib		\
