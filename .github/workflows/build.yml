@@ -7,35 +7,26 @@ on:
 
 jobs:
   ubuntu:
+    name: Build BlobOS
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-    - name: Checkout Limine repo
-      uses: actions/checkout@v3
-      with:
-        repository: limine-bootloader/limine
-        ref: v4.x-branch-binary
-        path: limine
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y grub-common mtools nasm cmake make
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y grub-common mtools nasm cmake make
+      - name: Build
+        run: |
+          make
 
-    - name: Build limine
-      run: |
-        make -C limine/
-
-    - name: Build
-      run: |
-        cmake -S . -B build
-        cmake --build build/ -- -j$(nproc)
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: BlobOS
-        path: build/BlobOS.iso # Change this to the path of your OS build artifacts
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: BlobOS
+          path: build/BlobOS.iso # Change this to the path of your OS build artifacts
