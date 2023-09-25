@@ -52,7 +52,9 @@ override CFLAGS += \
     -mno-mmx \
     -mno-sse \
     -mno-sse2 \
-    -mno-red-zone
+    -mno-red-zone \
+    -I Include/ \
+    -I ../../Include/
 
 override LDFLAGS :=	\
 	-nostdlib		\
@@ -68,10 +70,11 @@ override NASMFLAGS += \
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override CFILES := $(shell find ../../ -path ../../Arch -prune -type f -o -name '*.c')
-override NASMFILES := $(shell find -L . -type f -name '*.asm')
-override OBJ := $(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o)
-override HEADER_DEPS := $(CFILES:.c=.c.d) $(ASFILES:.S=.S.d)
+CFILES := $(shell find ../../ -path ../../Arch -prune -type f -o -name '*.c')
+CFILES += $(shell find ../../Arch/x86_64-pc -path . -prune -type f -o -name '*.c')
+NASMFILES := $(shell find -L . -type f -name '*.asm')
+OBJ := $(CFILES:.c=.c.o) $(NASMFILES:.asm=.asm.o)
+HEADER_DEPS := $(CFILES:.c=.c.d) $(ASFILES:.S=.S.d)
 
 # Default target.
 .PHONY: all

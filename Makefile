@@ -30,3 +30,12 @@ $(ISO_IMAGE): limine kernel
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		build/iso_root/ -o build/${ISO_IMAGE}
 		limine/limine bios-install build/${ISO_IMAGE}
+
+.PHONY: clean
+clean:
+	rm -rf build *.iso *.img *.tar *.tar.gz
+	$(MAKE) -C Kernel/Arch/$(CONFIG_ARCH)-$(CONFIG_TARGET) clean
+
+.PHONY: distclean
+distclean: clean
+	$(MAKE) -C Kernel/Arch/$(CONFIG_ARCH)-$(CONFIG_TARGET) distclean
