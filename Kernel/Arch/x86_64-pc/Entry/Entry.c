@@ -1,8 +1,8 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
 #include <LibK/stdio.h>
+#include <Serial/Serial.h>
 #include <limine.h>
-
 #ifndef GIT_VERSION
 #define GIT_VERSION "Undefined"
 #endif
@@ -15,6 +15,10 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
 
 void Arch_entry(void) {
+
+    start_serial();
+    serial_puts("BlobOS is initializing the framebuffer...\n");
+
     if (framebuffer_request.response == NULL ||
         framebuffer_request.response->framebuffer_count < 1) {
         hcf();
@@ -31,6 +35,8 @@ void Arch_entry(void) {
     fb.pitch = framebuffer->pitch;
 
     framebuffer_init(&fb);
+    serial_puts("Framebuffer initialized!\n");
+
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s", GIT_VERSION);
 #endif
