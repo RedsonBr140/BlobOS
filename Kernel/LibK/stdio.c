@@ -17,12 +17,12 @@ static void format_string(va_list *args) {
 };
 
 static void format_hexa(va_list *args) {
-    char buffer[sizeof(void *) + 2];
+    char buffer[20];
+    uint64_t number = va_arg(*args, size_t);
+
+    ultoa(number, buffer, 16);
     char prefix[] = "0x";
     size_t prefix_length = strlen(prefix);
-
-    int *pointer = va_arg(*args, void *);
-    itoa((int)&pointer, buffer, 16);
 
     // Shift buffer to the right by two bytes
     size_t buf_length = strlen(buffer);
@@ -31,6 +31,7 @@ static void format_hexa(va_list *args) {
 
     framebuffer_puts(buffer);
 };
+
 static void format_decimal(va_list *args) {
     char buffer[32];
 

@@ -1,0 +1,3 @@
+static void panic() {
+    hfc();
+}

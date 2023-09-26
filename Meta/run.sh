@@ -6,6 +6,16 @@ if [ ! -d "build" ]; then
     exit 1
 fi
 
+if [[ $1 == "debug" ]]; then
+    echo "Happy debugging!"
+    qemu-system-x86_64 -cdrom build/BlobOS.iso\
+        -serial stdio\
+        -s \
+        -S \
+        -boot dc
+    exit 0
+fi
+
 	echo "Running the ISO via qemu-system-x86_64"
 	qemu-system-x86_64 -cdrom build/BlobOS.iso\
         -serial stdio\

@@ -38,7 +38,7 @@ void Arch_entry(void) {
     serial_puts("Framebuffer initialized!\n");
 
 #ifdef GIT_VERSION
-    kprintf("Welcome to BlobOS!\nVersion: %s", GIT_VERSION);
+    kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
 
     hcf();
