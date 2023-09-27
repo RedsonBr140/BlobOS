@@ -1,5 +1,5 @@
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
+#pragma once
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -16,5 +16,3 @@ void framebuffer_init(struct framebuffer *fb);
 void framebuffer_clear(uint32_t foreground, uint32_t background);
 void framebuffer_putchar(char c);
 void framebuffer_puts(char *string);
-
-#endif

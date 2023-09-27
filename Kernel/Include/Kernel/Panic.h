@@ -1,4 +1,3 @@
-#ifndef PANIC_H
-#define PANIC_H
+#pragma once
+
 void panic(char *message);
-#endif

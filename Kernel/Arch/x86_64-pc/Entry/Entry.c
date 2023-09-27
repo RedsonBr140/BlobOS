@@ -47,7 +47,5 @@ void Arch_entry(void) {
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
-
-    panic("FUCK!");
     hcf();
 }

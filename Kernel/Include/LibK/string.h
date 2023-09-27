@@ -1,5 +1,4 @@
-#ifndef STRING_H
-#define STRING_H
+#pragma once
 
 #include <stddef.h>
 #include <stdint.h>
@@ -10,5 +9,3 @@ void *memmove(void *dest, const void *src, size_t n);
 int memcmp(const void *s1, const void *s2, size_t n);
 size_t strlen(const char *str);
 char *strcat(char *restrict dest, const char *restrict src);
-
-#endif

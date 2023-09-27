@@ -1,5 +1,3 @@
-#ifndef STDIO_H
-#define STDIO_H
-void kprintf(const char *format, ...);
+#pragma once
 
-#endif
+void kprintf(const char *format, ...);
