@@ -1,5 +1,6 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
+#include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <limine.h>
@@ -10,6 +11,12 @@
 // The Limine requests can be placed anywhere, but it is important that
 // the compiler does not optimise them away, so, usually, they should
 // be made volatile or equivalent.
+
+volatile struct limine_stack_size_request stack_size_request = {
+    .id = LIMINE_STACK_SIZE_REQUEST,
+    .revision = 0,
+    .stack_size = 32768,
+};
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
@@ -41,5 +48,6 @@ void Arch_entry(void) {
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
 
+    panic("FUCK!");
     hcf();
 }

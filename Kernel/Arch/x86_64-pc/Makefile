@@ -45,6 +45,7 @@ override CFLAGS += \
     -std=gnu11 \
     -ffreestanding \
     -fno-stack-protector \
+    -fno-omit-frame-pointer \
     -fno-stack-check \
     -fno-lto \
     -fPIE \
