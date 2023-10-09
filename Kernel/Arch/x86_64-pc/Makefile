@@ -32,7 +32,7 @@ override DEFAULT_CFLAGS := -g -O2 -pipe
 $(eval $(call DEFAULT_VAR,CFLAGS,$(DEFAULT_CFLAGS)))
 
 # User controllable nasm flags.
-override DEFAULT_NASMFLAGS := -F dwarf -g
+override DEFAULT_NASMFLAGS := -f elf64 -F dwarf -g
 $(eval $(call DEFAULT_VAR,NASMFLAGS,$(DEFAULT_NASMFLAGS)))
 
 # User controllable linker flags. We set none by default.
@@ -100,7 +100,7 @@ $(KERNEL): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
-%.asm.o: %.asm GNUmakefile
+%.asm.o: %.asm Makefile
 	nasm $(NASMFLAGS) $< -o $@
 
 # Remove object files and the final executable.
