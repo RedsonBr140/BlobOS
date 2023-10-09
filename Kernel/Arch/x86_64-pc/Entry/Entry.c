@@ -3,7 +3,10 @@
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
+#include <System/GDT.h>
+#include <System/PIC.h>
 #include <limine.h>
+
 #ifndef GIT_VERSION
 #define GIT_VERSION "Undefined"
 #endif
@@ -44,8 +47,28 @@ void Arch_entry(void) {
     framebuffer_init(&fb);
     serial_puts("Framebuffer initialized!\n");
 
+    // Ensure interrupts are disabled.
+    cli();
+
+    GDT_Init();
+    kprintf("New GDT Loaded!\n");
+
+    IDT_Init();
+
+    kprintf("IDT Loaded!\n");
+    sti();
+    kprintf("Interrupts enabled!\n");
+
+    // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
+    PIC_Init(0x20, 0x28);
+    kprintf("PIC working\n");
+
+    kprintf("IDT Loaded!\n");
+    sti();
+    kprintf("Interrupts enabled!\n");
+
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
-    hcf();
+    halt();
 }

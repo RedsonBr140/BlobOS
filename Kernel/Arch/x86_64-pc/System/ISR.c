@@ -1,0 +1,1 @@
+void isr_handler() { panic("ISR!"); }
