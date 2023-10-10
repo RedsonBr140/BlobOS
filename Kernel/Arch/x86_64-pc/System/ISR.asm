@@ -1,11 +1,24 @@
 [bits 64]
 [extern isr_handler]
 
-%macro PUSHAQ 0
+%macro isr_err_stub 1
+isr_stub_%+%1:
+    push %1
+    jmp isr_common
+%endmacro
+
+%macro isr_no_err_stub 1
+isr_stub_%+%1:
+    push 0
+    push %1
+    jmp isr_common
+%endmacro
+
+%macro pushagrd 0
     push rax
+    push rbx
     push rcx
     push rdx
-    push rbx
     push rsi
     push rdi
     push r8
@@ -18,7 +31,7 @@
     push r15
 %endmacro
 
-%macro POPAQ 0
+%macro popagrd 0
     pop r15
     pop r14
     pop r13
@@ -29,80 +42,59 @@
     pop r8
     pop rdi
     pop rsi
-    pop rbx
     pop rdx
     pop rcx
+    pop rbx
     pop rax
 %endmacro
 
-
-%macro ISR_NO_ERR 1
-global ISR_STUB_%1
-ISR_STUB_%1:
-    push 0      ; Dummy error code
-    push %1     ; interrupt number
-    jmp isr_common
-%endmacro
-
-%macro ISR_ERR 1
-global ISR_STUB_%1
-ISR_STUB_%1:
-    ; These error codes are pushed by the processor itself
-    push %1     ; interrupt number
-    jmp isr_common
-%endmacro
-
 isr_common:
-    PUSHAQ
-    cld
-    push rsp
+    push rbp
+    mov rbp, rsp
+    pushagrd
+
     call isr_handler
-    POPAQ
-    
+    popagrd
+    add rsp, 0x10
+    iretq
 
-ISR_NO_ERR 0
-ISR_NO_ERR 1
-ISR_NO_ERR 2
-ISR_NO_ERR 3
-ISR_NO_ERR 4
-ISR_NO_ERR 5
-ISR_NO_ERR 6
-ISR_NO_ERR 7
-ISR_ERR 8
-ISR_NO_ERR 9
-ISR_ERR 10
-ISR_ERR 11
-ISR_ERR 12
-ISR_ERR 13
-ISR_ERR 14
-ISR_NO_ERR 15
-ISR_NO_ERR 16
-ISR_ERR 17
-ISR_NO_ERR 18
-ISR_NO_ERR 19
-ISR_NO_ERR 20
-ISR_ERR 21
-ISR_NO_ERR 22
-ISR_NO_ERR 23
-ISR_NO_ERR 24
-ISR_NO_ERR 25
-ISR_NO_ERR 26
-ISR_NO_ERR 27
-ISR_NO_ERR 28
-ISR_NO_ERR 29
-ISR_NO_ERR 30
-ISR_NO_ERR 31
-
-%assign i 32
-%rep 224 ; 255 - 32 whats what we've gone through already
-    ISR_NO_ERR i
-    %assign i i+1
-%endrep
+isr_no_err_stub 0
+isr_no_err_stub 1
+isr_no_err_stub 2
+isr_no_err_stub 3
+isr_no_err_stub 4
+isr_no_err_stub 5
+isr_no_err_stub 6
+isr_no_err_stub 7
+isr_err_stub    8
+isr_no_err_stub 9
+isr_err_stub    10
+isr_err_stub    11
+isr_err_stub    12
+isr_err_stub    13
+isr_err_stub    14
+isr_no_err_stub 15
+isr_no_err_stub 16
+isr_err_stub    17
+isr_no_err_stub 18
+isr_no_err_stub 19
+isr_no_err_stub 20
+isr_no_err_stub 21
+isr_no_err_stub 22
+isr_no_err_stub 23
+isr_no_err_stub 24
+isr_no_err_stub 25
+isr_no_err_stub 26
+isr_no_err_stub 27
+isr_no_err_stub 28
+isr_no_err_stub 29
+isr_err_stub    30
+isr_no_err_stub 31
 
 global isr_stub_table
 isr_stub_table:
 %assign i 0
-%rep 256
-    dq ISR_STUB_%+i
+%rep 32
+    dq isr_stub_%+i
 %assign i i+1
 %endrep
