@@ -51,11 +51,11 @@ void Arch_entry(void) {
     cli();
 
     GDT_Init();
-    kprintf("New GDT Loaded!\n");
+    kprintf("GDT (Re)-loaded!");
 
     IDT_Init();
-
     kprintf("IDT Loaded!\n");
+
     sti();
     kprintf("Interrupts enabled!\n");
 
@@ -63,12 +63,13 @@ void Arch_entry(void) {
     PIC_Init(0x20, 0x28);
     kprintf("PIC working\n");
 
-    kprintf("IDT Loaded!\n");
     sti();
     kprintf("Interrupts enabled!\n");
 
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
+
+    asm("int $0x00");
     halt();
 }
