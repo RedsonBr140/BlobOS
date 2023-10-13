@@ -12,7 +12,8 @@ if [[ $1 == "debug" ]]; then
         -serial stdio\
         -s \
         -S \
-        -boot dc
+        -boot dc \
+        -d int
     exit 0
 fi
 

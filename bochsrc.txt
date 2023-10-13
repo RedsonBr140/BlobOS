@@ -1,0 +1,6 @@
+memory: guest=256, host=256
+ata0-master: type=cdrom, path=build/BlobOS.iso, status=inserted
+boot: cdrom
+
+display_library: sdl2, options="gui_debug"
+magic_break: enabled=1
