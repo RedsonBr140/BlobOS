@@ -49,13 +49,11 @@ isr_stub_%+%1:
 %endmacro
 
 isr_common:
-    push rbp
-    mov rbp, rsp
     pushagrd
-
+    mov rdi, rsp
     call isr_handler
     popagrd
-    add rsp, 0x10
+    add rsp, 16
     iretq
 
 isr_no_err_stub 0

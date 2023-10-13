@@ -51,7 +51,7 @@ void Arch_entry(void) {
     cli();
 
     GDT_Init();
-    kprintf("GDT (Re)-loaded!");
+    kprintf("GDT (Re)-loaded!\n");
 
     IDT_Init();
     kprintf("IDT Loaded!\n");
@@ -69,7 +69,6 @@ void Arch_entry(void) {
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
-
-    asm("int $0x00");
+    asm("int $0x0");
     halt();
 }

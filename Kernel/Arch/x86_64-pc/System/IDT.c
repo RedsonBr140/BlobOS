@@ -10,7 +10,7 @@ void idt_set_descriptor(uint8_t vector, uintptr_t isr, uint8_t flags) {
     idt_entry_t *descriptor = &idt[vector];
 
     descriptor->isr_low = (uint64_t)isr & 0xFFFF;
-    descriptor->kernel_cs = 0x08; // Kernel code offset
+    descriptor->kernel_cs = 0x0028; // Kernel code offset
     descriptor->ist = 0;
     descriptor->attributes = flags;
     descriptor->isr_mid = ((uint64_t)isr >> 16) & 0xFFFF;
