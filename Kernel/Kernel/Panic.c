@@ -1,4 +1,5 @@
 #include <Asm/Asm.h>
+#include <Framebuffer/Framebuffer.h>
 #include <IO/Ports.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
