@@ -1,6 +1,5 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
-#include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
@@ -69,6 +68,5 @@ void Arch_entry(void) {
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
-    asm("int $0x0");
     halt();
 }
