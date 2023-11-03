@@ -14,12 +14,6 @@
 // the compiler does not optimise them away, so, usually, they should
 // be made volatile or equivalent.
 
-volatile struct limine_stack_size_request stack_size_request = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = 0,
-    .stack_size = 32768,
-};
-
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
 
@@ -48,6 +42,7 @@ void Arch_entry(void) {
 
     // Ensure interrupts are disabled.
     cli();
+    kprintf("Interrupts disabled!\n");
 
     GDT_Init();
     kprintf("GDT (Re)-loaded!\n");
@@ -55,12 +50,10 @@ void Arch_entry(void) {
     IDT_Init();
     kprintf("IDT Loaded!\n");
 
-    sti();
-    kprintf("Interrupts enabled!\n");
-
     // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
-    PIC_Init(0x20, 0x28);
-    kprintf("PIC working\n");
+    PIC_Initialize(0x20, 0x28);
+    PIC_Mask(ALL);
+    kprintf("PIC remapped to 0x20 and 0x28\n");
 
     sti();
     kprintf("Interrupts enabled!\n");
@@ -68,5 +61,6 @@ void Arch_entry(void) {
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
+    // asm("int $0x01");
     halt();
 }
