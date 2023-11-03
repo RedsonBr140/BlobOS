@@ -1,7 +1,6 @@
 CONFIG_ARCH ?= x86_64
 CONFIG_TARGET ?= pc
 
-OBJSDIR ?= build/objs
 NAME ?= BlobOS
 ISO_IMAGE := $(NAME).iso
 KERNEL_ELF := $(NAME).elf
@@ -15,7 +14,6 @@ limine:
 
 .PHONY: kernel
 kernel:
-	mkdir -p $(OBJSDIR)
 	make -C Kernel/Arch/$(CONFIG_ARCH)-$(CONFIG_TARGET)
 
 $(ISO_IMAGE): limine kernel

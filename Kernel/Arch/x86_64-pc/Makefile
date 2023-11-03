@@ -85,7 +85,6 @@ HEADER_DEPS := $(CFILES:.c=.c.d) $(ASFILES:.S=.S.d)
 all: $(KERNEL)
 
 limine.h:
-	pwd
 	[ -s Include/$@ ] || curl \
 	https://raw.githubusercontent.com/limine-bootloader/limine/v5.x-branch/limine.h -o Include/$@
 

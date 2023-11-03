@@ -5,7 +5,7 @@
 #define ALIGN (sizeof(size_t))
 #define ONES ((size_t)-1 / UCHAR_MAX)
 #define HIGHS (ONES * (UCHAR_MAX / 2 + 1))
-#define HASZERO(x) (((x)-ONES) & ~(x)&HIGHS)
+#define HASZERO(x) (((x)-ONES) & ~(x) & HIGHS)
 
 // GCC and Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
@@ -97,4 +97,76 @@ char *strcpy(char *restrict d, const char *restrict s) {
 char *strcat(char *restrict dest, const char *restrict src) {
     strcpy(dest + strlen(dest), src);
     return dest;
+}
+
+unsigned int is_delim(char c, char *delim) {
+    while (*delim != '\0') {
+        if (c == *delim)
+            return 1;
+        delim++;
+    }
+    return 0;
+}
+
+char *strtok(char *srcString, char *delim) {
+    static char *backup_string; // start of the next search
+    if (!srcString) {
+        srcString = backup_string;
+    }
+    if (!srcString) {
+        // user is bad user
+        return NULL;
+    }
+    // handle beginning of the string containing delims
+    while (1) {
+        if (is_delim(*srcString, delim)) {
+            srcString++;
+            continue;
+        }
+        if (*srcString == '\0') {
+            // we've reached the end of the string
+            return NULL;
+        }
+        break;
+    }
+    char *ret = srcString;
+    while (1) {
+        if (*srcString == '\0') {
+            /*end of the input string and
+            next exec will return NULL*/
+            backup_string = srcString;
+            return ret;
+        }
+        if (is_delim(*srcString, delim)) {
+            *srcString = '\0';
+            backup_string = srcString + 1;
+            return ret;
+        }
+        srcString++;
+    }
+}
+
+int strcmp(const char *s1, const char *s2) {
+    const unsigned char *p1 = (const unsigned char *)s1;
+    const unsigned char *p2 = (const unsigned char *)s2;
+
+    while (*p1 && *p1 == *p2)
+        ++p1, ++p2;
+
+    return (*p1 > *p2) - (*p2 > *p1);
+}
+
+char *strchr(const char *s, int c) {
+    while (*s != '\0') {
+        if (*s == c) {
+            return (char *)s;
+        }
+        s++;
+    }
+
+    if (c == '\0') {
+        return (char *)s;
+    }
+
+    return NULL;
 }

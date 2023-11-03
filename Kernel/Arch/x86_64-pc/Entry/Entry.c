@@ -1,5 +1,6 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
+#include <Kernel/CMDLine.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
@@ -14,16 +15,15 @@
 // the compiler does not optimise them away, so, usually, they should
 // be made volatile or equivalent.
 
-volatile struct limine_stack_size_request stack_size_request = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = 0,
-    .stack_size = 32768,
-};
+static volatile struct limine_kernel_file_request kernel_file_request = {
+    .id = LIMINE_KERNEL_FILE_REQUEST, .revision = 0};
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
 
 void Arch_entry(void) {
+    // Be able to work with the CMDLine from the very early stage
+    parseCMDLine(kernel_file_request.response->kernel_file->cmdline);
 
     start_serial();
     serial_puts("BlobOS is initializing the framebuffer...\n");
@@ -50,23 +50,20 @@ void Arch_entry(void) {
     cli();
 
     GDT_Init();
-    kprintf("GDT (Re)-loaded!\n");
-
-    IDT_Init();
-    kprintf("IDT Loaded!\n");
-
-    sti();
-    kprintf("Interrupts enabled!\n");
+    printk(LOG_LEVEL_INFO, "GDT (Re)-loaded!\n");
 
     // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
     PIC_Init(0x20, 0x28);
-    kprintf("PIC working\n");
+    printk(LOG_LEVEL_INFO, "PIC working\n");
+
+    IDT_Init();
+    printk(LOG_LEVEL_INFO, "IDT Loaded!\n");
 
     sti();
-    kprintf("Interrupts enabled!\n");
+    printk(LOG_LEVEL_INFO, "Interrupts enabled!\n");
 
 #ifdef GIT_VERSION
-    kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
+    printk(LOG_LEVEL_INFO, "Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
     halt();
 }

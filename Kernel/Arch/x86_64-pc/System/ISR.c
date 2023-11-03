@@ -44,9 +44,9 @@ void isr_handler(Registers *frame) {
     if (ISR_handlers[isr] != NULL)
         ISR_handlers[isr](frame);
     else if (isr < 32) {
-        kprintf("Unhandled exception %d %s", isr, exceptions_str[isr]);
+        printk(LOG_LEVEL_WARNING,"Unhandled exception %d %s", isr, exceptions_str[isr]);
     } else {
-        kprintf("Unhandled interrupt: %d", isr);
+        printk(LOG_LEVEL_WARNING,"Unhandled interrupt: %d", isr);
     }
 }
 
