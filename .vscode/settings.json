@@ -4,6 +4,7 @@
     "vector": "c",
     "*.tcc": "c",
     "idt.h": "c",
-    "asm.h": "c"
+    "asm.h": "c",
+    "irq.h": "c"
   }
 }
