@@ -49,9 +49,9 @@ void printk(int log_level, const char *format, ...) {
     va_list args;
     va_start(args, format);
 
-    const CMDLine cmdline = getCMDLine();
+    const CMDLine *cmdline = getCMDLine();
 
-    if (log_level == LOG_LEVEL_INFO && cmdline.quiet == 1) {
+    if (log_level == LOG_LEVEL_INFO && cmdline->quiet == 1) {
         va_end(args);
         return;
     }

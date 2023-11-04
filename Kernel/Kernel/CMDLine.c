@@ -1,19 +1,22 @@
 #include <Kernel/CMDLine.h>
 #include <LibK/string.h>
 
-CMDLine global_cmdline;
+/*
+ * FIXME: We need a memory allocator for being able to store this in memory in a
+ * safe way.
+ */
+CMDLine *g_cmdline = NULL;
 
-CMDLine getCMDLine() { return global_cmdline; }
+CMDLine *getCMDLine() { return g_cmdline; }
 
 // Function to parse the command line
-CMDLine parseCMDLine(char *cmdline) {
-    // Initialize the global_cmdline structure
-    global_cmdline.quiet = 0;
-    global_cmdline.serial = NULL;
+CMDLine *parseCMDLine(char *cmdline) {
+    CMDLine l_cmdline = {.quiet = 0, .serial = "no"};
+    g_cmdline = &l_cmdline;
 
     // If we don't get any arguments, return the empty cmdline
     if (strlen(cmdline) == 0) {
-        return global_cmdline;
+        return g_cmdline;
     }
 
     // Tokenize the cmdline based on spaces
@@ -29,25 +32,20 @@ CMDLine parseCMDLine(char *cmdline) {
             char *value = equal_sign + 1;
 
             // Check the name and store the value accordingly
-            if (strcmp(name, "serial")) {
-                global_cmdline.serial = value;
+            if (strcmp(name, "serial") == 0) {
+                /*
+                 * FIXME: It's not safe to write a string literal to a pointer.
+                 We shall implement functions for that as well.
+                */
+                // g_cmdline->serial = value;
             }
         } else {
-            // FIXME: There's something wrong here...
             // If there's no '=', it's just a parameter without a value
-            if (strcmp(token, "quiet")) {
-                global_cmdline.quiet = 1; // Set a default value
+            if (strcmp(token, "quiet") == 0) {
+                g_cmdline->quiet = 1; // Set a default value
             }
         }
-
-        token = strtok(NULL, " ");
     }
 
-    // If after all of this we still have cmdlines to be NULL, set a default
-    // value.
-    if (strcmp(global_cmdline.serial, "")) {
-        global_cmdline.serial = "no";
-    }
-
-    return global_cmdline;
+    return g_cmdline;
 }

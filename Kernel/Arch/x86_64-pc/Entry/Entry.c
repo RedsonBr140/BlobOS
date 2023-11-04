@@ -63,7 +63,7 @@ void Arch_entry(void) {
     printk(LOG_LEVEL_INFO, "Interrupts enabled!\n");
 
 #ifdef GIT_VERSION
-    printk(LOG_LEVEL_INFO, "Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
+    printk(LOG_LEVEL_WARNING, "Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
     halt();
 }
