@@ -3,6 +3,10 @@
 
 #define IDT_MAX_DESCRIPTORS 256
 
+#define IDT_FLAGS_INTERRUPT_GATE 0x8E
+#define IDT_FLAGS_TRAP_GATE 0x8F
+
+void IDT_Add_Int(uint8_t vector, void (*isr)(), uint8_t flags);
 void IDT_Init(void);
 
 // 64-bit IDT Entry.
