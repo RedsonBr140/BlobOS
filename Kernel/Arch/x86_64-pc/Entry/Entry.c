@@ -3,12 +3,15 @@
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
+#include <System/Interrupts.h>
 #include <System/PIC.h>
 #include <limine.h>
 
 #ifndef GIT_VERSION
 #define GIT_VERSION "Undefined"
 #endif
+
+extern void far_jump(void);
 
 // The Limine requests can be placed anywhere, but it is important that
 // the compiler does not optimise them away, so, usually, they should
@@ -47,20 +50,39 @@ void Arch_entry(void) {
     GDT_Init();
     kprintf("GDT (Re)-loaded!\n");
 
-    IDT_Init();
-    kprintf("IDT Loaded!\n");
+    reloadSegments();
+    kprintf("Data and code segment registers reloaded!\n");
 
     // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
     PIC_Initialize(0x20, 0x28);
-    PIC_Mask(ALL);
     kprintf("PIC remapped to 0x20 and 0x28\n");
+    PIC_Mask(ALL);
+
+    Load_Exceptions();
+    kprintf("Exceptions Loaded!\n");
+
+    IDT_Init();
+    kprintf("IDT Loaded!\n");
 
     sti();
     kprintf("Interrupts enabled!\n");
 
+    // PIC_Unmask(TIMER);
+
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+    asm("int $35");
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+    asm("int $0");
+
 #ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 #endif
-    // asm("int $0x01");
     halt();
 }
