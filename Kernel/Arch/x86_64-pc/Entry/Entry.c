@@ -1,3 +1,4 @@
+#include "Kernel/Panic.h"
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
 #include <LibK/stdio.h>
@@ -6,10 +7,7 @@
 #include <System/Interrupts.h>
 #include <System/PIC.h>
 #include <limine.h>
-
-#ifndef GIT_VERSION
-#define GIT_VERSION "Undefined"
-#endif
+#include <meta.h>
 
 extern void far_jump(void);
 
@@ -81,8 +79,7 @@ void Arch_entry(void) {
     asm("int $0");
     asm("int $0");
 
-#ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
-#endif
+
     halt();
 }

@@ -2,15 +2,11 @@
 #include <Framebuffer/Framebuffer.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
-#include <stdint.h>
+#include <meta.h>
 
-struct stackframe {
-    struct stackframe *rbp;
-    uint64_t rip;
-};
+#include <Kernel/Stack.h>
 
-// TODO: Unwind the stack and get a cool stack trace :)
-void panic(char *message) {
+void panic(char message[static 1]) {
     framebuffer_clear(0xcccccc, 0xc40404);
     kprintf(
         "BlobOS encountered an error which it couldn't recover from.\nPlease "
@@ -18,6 +14,9 @@ void panic(char *message) {
         "with detailed information.\nYou will need to restart your "
         "computer.\n");
 
-    kprintf("\nError message: %s\n", message);
+    kprintf("\nVersion: %s\n", GIT_VERSION);
+    kprintf("Error message: %s\n", message);
+
+    dumpStack();
     hcf();
 }

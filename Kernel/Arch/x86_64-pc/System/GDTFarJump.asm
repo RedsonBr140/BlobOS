@@ -15,3 +15,4 @@ reloadSegments:
     mov gs, ax
     mov ss, ax
     ret
+

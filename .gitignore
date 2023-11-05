@@ -81,3 +81,5 @@ dkms.conf
 
 ## Bochs
 bx_enh_dbg.ini
+
+compile_commands.json
