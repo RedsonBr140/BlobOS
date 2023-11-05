@@ -6,6 +6,8 @@
 bool interrupts_enabled();
 void loadIDT(idtr_t *idtr);
 void halt(void);
-void hcf(void);
+__attribute__((noreturn)) void hcf(void);
 void sti(void);
 void cli(void);
+
+extern void reloadSegments(void);

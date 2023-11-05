@@ -1,5 +1,6 @@
 [bits 64]
 [global reloadSegments]
+[global set_up_stack]
 
 reloadSegments:
     push 0x08 ; Push code segment to stack
@@ -15,3 +16,4 @@ reloadSegments:
     mov gs, ax
     mov ss, ax
     ret
+
