@@ -14,26 +14,6 @@ void dumpStack(void) {
         rbp += sizeof(void *);
     }
 }
-
-#elif defined(__i386__)
-/* NOTE: NOT TESTED. */
-
-struct stackframe {
-    struct stackframe *ebp;
-    uint64_t rip;
-};
-
-void dumpStack(void) {
-    kprintf("Stacktrace:\n");
-    struct stackframe *stackFrame;
-    asm("movl %%ebp,%0" : "=r"(stackFrame)::);
-    for (uint64_t frame = 0; stackFrame && frame < PANIC_STACK_ENTRIES_MAX;
-         ++frame) {
-
-        kprintf(" [%p]\n", stackFrame->rip);
-        stackFrame = stackFrame->ebp;
-    }
-}
 #else
 void dumpStack(void) { kprintf("Stacktrace unavaliable.\n"); }
 #endif
