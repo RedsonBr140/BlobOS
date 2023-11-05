@@ -49,16 +49,15 @@ __attribute__((interrupt)) void C_Int_12(struct interrupt_frame *frame,
 }
 __attribute__((interrupt)) void C_Int_13(struct interrupt_frame *frame,
                                          uint64_t error_code) {
-    kprintf("%p", error_code);
-    asm("hlt");
-    // panic("General Protection Fault #GP");
+    panic("General Protection Fault #GP");
 }
 __attribute__((interrupt)) void C_Int_14(struct interrupt_frame *frame,
                                          uint64_t error_code) {
+    /*
     uint64_t *faultAddress;
     asm volatile("mov %%cr2, %0" : "=r"(faultAddress)::"memory");
-    kprintf("%p", faultAddress);
-    // panic("Page Fault #PF");
+    */
+    panic("Page Fault #PF");
 }
 __attribute__((interrupt)) void C_Int_16(struct interrupt_frame *frame) {
     panic("FPU Floating-Point Error #MF");

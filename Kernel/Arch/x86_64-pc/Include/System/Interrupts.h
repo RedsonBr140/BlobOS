@@ -1,12 +1,8 @@
 #pragma once
 #include <stdint.h>
 
-struct interrupt_frame {
-    uint64_t ip;
-    uint64_t cs;
-    uint64_t flags;
-    uint64_t sp;
-    uint64_t ss;
+__attribute__((packed)) struct interrupt_frame {
+    uint64_t rax, rds, rcx, rsi, rdi, r8, r9, r10, r11, rbp
 };
 
 typedef struct {

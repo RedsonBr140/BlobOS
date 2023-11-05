@@ -1,6 +1,6 @@
-#include "Kernel/Panic.h"
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
+#include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
@@ -65,21 +65,9 @@ void Arch_entry(void) {
     sti();
     kprintf("Interrupts enabled!\n");
 
-    // PIC_Unmask(TIMER);
-
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
-    asm("int $35");
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
-    asm("int $0");
+    kprintf("Manually raising interrupt 0:\n");
+    asm("int $14");
 
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
-
     halt();
 }
