@@ -33,4 +33,5 @@ enum Interrupts {
 void PIC_Initialize(int offset1, int offset2);
 void PIC_SendEOI(unsigned char irq);
 void PIC_Mask(unsigned char IRQline);
+void PIC_MaskAll(void);
 void PIC_Unmask(unsigned char IRQline);

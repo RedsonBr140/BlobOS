@@ -1,7 +1,9 @@
+#include <IO/Ports.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
+#include <System/Exceptions.h>
 #include <System/IDT.h>
-#include <System/Interrupts.h>
+#include <System/PIC.h>
 
 __attribute__((interrupt)) void C_Int_0(struct interrupt_frame *frame) {
     kprintf("Divide By Zero Error #00\n");
@@ -80,6 +82,12 @@ Default_INT_Handler(struct interrupt_frame *frame) {
     kprintf("Unhandled interrupt!\n");
 }
 
+__attribute__((interrupt)) void Keyboard(struct interrupt_frame *frame) {
+    inb(0x60);
+    kprintf("Key pressed");
+    PIC_SendEOI(PIC_REMAP_OFFSET + KEYBOARD);
+}
+
 void Load_Exceptions(void) {
     IDT_Add_Int(0, C_Int_0, IDT_FLAGS_INTERRUPT_GATE);
     IDT_Add_Int(1, C_Int_1, IDT_FLAGS_INTERRUPT_GATE);
@@ -105,4 +113,7 @@ void Load_Exceptions(void) {
     for (uint8_t i = 20; i < 255; i++) {
         IDT_Add_Int(i, Default_INT_Handler, IDT_FLAGS_INTERRUPT_GATE);
     }
+
+    IDT_Add_Int(PIC_REMAP_OFFSET + KEYBOARD, Keyboard,
+                IDT_FLAGS_INTERRUPT_GATE);
 }

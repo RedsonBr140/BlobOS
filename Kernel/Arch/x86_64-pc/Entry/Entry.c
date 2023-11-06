@@ -4,16 +4,11 @@
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
-#include <System/Interrupts.h>
 #include <System/PIC.h>
 #include <limine.h>
 #include <meta.h>
 
 extern void far_jump(void);
-
-// The Limine requests can be placed anywhere, but it is important that
-// the compiler does not optimise them away, so, usually, they should
-// be made volatile or equivalent.
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
@@ -54,10 +49,7 @@ void Arch_entry(void) {
     // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
     PIC_Initialize(0x20, 0x28);
     kprintf("PIC remapped to 0x20 and 0x28\n");
-    PIC_Mask(ALL);
-
-    Load_Exceptions();
-    kprintf("Exceptions Loaded!\n");
+    PIC_MaskAll();
 
     IDT_Init();
     kprintf("IDT Loaded!\n");
@@ -65,9 +57,8 @@ void Arch_entry(void) {
     sti();
     kprintf("Interrupts enabled!\n");
 
-    kprintf("Manually raising interrupt 0:\n");
-    asm("int $14");
-
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
+
+    PIC_Unmask(KEYBOARD);
     halt();
 }

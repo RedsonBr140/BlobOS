@@ -1,5 +1,6 @@
 #include <Asm/Asm.h>
 #include <Kernel/Panic.h>
+#include <System/Exceptions.h>
 #include <System/IDT.h>
 
 __attribute__((aligned(0x10))) static idt_entry_t idt[256];
@@ -19,6 +20,8 @@ void IDT_Add_Int(uint8_t vector, void (*isr)(), uint8_t flags) {
 void IDT_Init(void) {
     idtr.base = (uintptr_t)&idt[0];
     idtr.limit = (uint16_t)sizeof(idt_entry_t) * IDT_MAX_DESCRIPTORS - 1;
+
+    Load_Exceptions();
 
     __asm__ volatile("lidt %0" : : "m"(idtr)); // load the new IDT
 }

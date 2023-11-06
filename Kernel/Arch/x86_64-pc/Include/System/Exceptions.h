@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 __attribute__((packed)) struct interrupt_frame {
-    uint64_t rax, rds, rcx, rsi, rdi, r8, r9, r10, r11, rbp
+    uint64_t rax, rds, rcx, rsi, rdi, r8, r9, r10, r11, rbp;
 };
 
 typedef struct {
@@ -10,7 +10,5 @@ typedef struct {
     uint64_t rdi, rsi, rbx, rdx, rcx, rax;
     uint64_t error;
 } __attribute__((packed)) Registers;
-
-typedef void (*ISRHandler)(Registers *regs);
 
 void Load_Exceptions(void);

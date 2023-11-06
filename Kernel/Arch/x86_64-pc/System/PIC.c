@@ -87,3 +87,8 @@ void PIC_SendEOI(unsigned char irq) {
         outb(PIC2_COMMAND, PIC_EOI);
     outb(PIC1_COMMAND, PIC_EOI);
 }
+
+void PIC_MaskAll(void) {
+    outb(PIC2_DATA, ALL);
+    outb(PIC2_DATA, ALL);
+}
