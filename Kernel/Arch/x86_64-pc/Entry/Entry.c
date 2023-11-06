@@ -1,24 +1,15 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
+#include <IO/Ports.h>
+#include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
 #include <System/GDT.h>
 #include <System/PIC.h>
 #include <limine.h>
+#include <meta.h>
 
-#ifndef GIT_VERSION
-#define GIT_VERSION "Undefined"
-#endif
-
-// The Limine requests can be placed anywhere, but it is important that
-// the compiler does not optimise them away, so, usually, they should
-// be made volatile or equivalent.
-
-volatile struct limine_stack_size_request stack_size_request = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = 0,
-    .stack_size = 32768,
-};
+extern void far_jump(void);
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
@@ -48,9 +39,18 @@ void Arch_entry(void) {
 
     // Ensure interrupts are disabled.
     cli();
+    kprintf("Interrupts disabled!\n");
 
     GDT_Init();
     kprintf("GDT (Re)-loaded!\n");
+
+    reloadSegments();
+    kprintf("Data and code segment registers reloaded!\n");
+
+    // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
+    PIC_Initialize(0x20, 0x28);
+    kprintf("PIC remapped to 0x20 and 0x28\n");
+    PIC_MaskAll();
 
     IDT_Init();
     kprintf("IDT Loaded!\n");
@@ -58,15 +58,12 @@ void Arch_entry(void) {
     sti();
     kprintf("Interrupts enabled!\n");
 
-    // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
-    PIC_Init(0x20, 0x28);
-    kprintf("PIC working\n");
-
-    sti();
-    kprintf("Interrupts enabled!\n");
-
-#ifdef GIT_VERSION
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
-#endif
-    halt();
+
+    PIC_Unmask(KEYBOARD);
+
+    // FIXME: This is hacky and will slow down the kernel.
+    for (;;) {
+        io_wait();
+    }
 }

@@ -13,9 +13,9 @@ bool interrupts_enabled() {
 void loadIDT(idtr_t *idtr) { __asm__ volatile("lidt %0" : : "m"(*idtr)); }
 void sti(void) { asm("sti"); }
 void cli(void) { asm("cli"); }
-void halt(void) { asm("hlt"); }
+__attribute__((noreturn)) void halt(void) { asm("hlt"); }
 
-void hcf(void) {
+__attribute__((noreturn)) void hcf(void) {
     asm("cli");
     for (;;) {
         asm("hlt");

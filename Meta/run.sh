@@ -21,4 +21,5 @@ fi
 	qemu-system-x86_64 -cdrom build/BlobOS.iso\
         -serial stdio\
         -enable-kvm\
-        -boot dc
+        -boot dc\
+	-d int
