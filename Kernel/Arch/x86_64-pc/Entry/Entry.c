@@ -1,5 +1,6 @@
 #include <Asm/Asm.h>
 #include <Framebuffer/Framebuffer.h>
+#include <IO/Ports.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
 #include <Serial/Serial.h>
@@ -60,5 +61,9 @@ void Arch_entry(void) {
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 
     PIC_Unmask(KEYBOARD);
-    halt();
+
+    // FIXME: This is hacky and will slow down the kernel.
+    for (;;) {
+        io_wait();
+    }
 }

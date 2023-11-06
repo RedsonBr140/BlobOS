@@ -84,8 +84,13 @@ Default_INT_Handler(struct interrupt_frame *frame) {
 
 __attribute__((interrupt)) void Keyboard(struct interrupt_frame *frame) {
     inb(0x60);
-    kprintf("Key pressed");
-    PIC_SendEOI(PIC_REMAP_OFFSET + KEYBOARD);
+    kprintf("Key pressed!\n");
+    PIC_SendEOI(KEYBOARD);
+}
+
+__attribute__((interrupt)) void TimerF(struct interrupt_frame *frame) {
+    kprintf(".");
+    PIC_SendEOI(TIMER);
 }
 
 void Load_Exceptions(void) {
@@ -113,6 +118,8 @@ void Load_Exceptions(void) {
     for (uint8_t i = 20; i < 255; i++) {
         IDT_Add_Int(i, Default_INT_Handler, IDT_FLAGS_INTERRUPT_GATE);
     }
+
+    IDT_Add_Int(PIC_REMAP_OFFSET + TIMER, TimerF, IDT_FLAGS_INTERRUPT_GATE);
 
     IDT_Add_Int(PIC_REMAP_OFFSET + KEYBOARD, Keyboard,
                 IDT_FLAGS_INTERRUPT_GATE);
