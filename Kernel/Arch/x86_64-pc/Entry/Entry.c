@@ -1,20 +1,23 @@
 #include <Asm/Asm.h>
+#include <Entry/HAL.h>
 #include <Framebuffer/Framebuffer.h>
 #include <IO/Ports.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
+#include <Meta.h>
 #include <Serial/Serial.h>
-#include <System/GDT.h>
-#include <System/PIC.h>
 #include <limine.h>
-#include <meta.h>
-
-extern void far_jump(void);
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST, .revision = 0};
 
+static volatile struct limine_memmap_request memmap_request = {
+    .id = LIMINE_MEMMAP_REQUEST, .revision = 0};
+
 void Arch_entry(void) {
+
+    // Ensure interrupts are disabled.
+    cli();
 
     start_serial();
     serial_puts("BlobOS is initializing the framebuffer...\n");
@@ -37,30 +40,26 @@ void Arch_entry(void) {
     framebuffer_init(&fb);
     serial_puts("Framebuffer initialized!\n");
 
-    // Ensure interrupts are disabled.
-    cli();
-    kprintf("Interrupts disabled!\n");
+    // Wait for the framebuffer to initialize so that we can show what happened
+    if (memmap_request.response == NULL ||
+        memmap_request.response->entry_count < 1) {
+        panic("(x86-64) Memory map unavailable!");
+    }
 
-    GDT_Init();
-    kprintf("GDT (Re)-loaded!\n");
-
-    reloadSegments();
-    kprintf("Data and code segment registers reloaded!\n");
-
-    // IRQ0 starts at 0x20 and IRQ8 starts at 0x28.
-    PIC_Initialize(0x20, 0x28);
-    kprintf("PIC remapped to 0x20 and 0x28\n");
-    PIC_MaskAll();
-
-    IDT_Init();
-    kprintf("IDT Loaded!\n");
-
-    sti();
-    kprintf("Interrupts enabled!\n");
-
+    HAL_Init();
     kprintf("Welcome to BlobOS!\nVersion: %s\n", GIT_VERSION);
 
-    PIC_Unmask(KEYBOARD);
+    uint64_t total = 0;
+
+    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
+        struct limine_memmap_entry *entry = memmap_request.response->entries[i];
+        kprintf("Mem Entry %d: Base: %p | Lenght: %d | Type: %d\n", i,
+                entry->base, entry->length, entry->type);
+
+        total += entry->length;
+    }
+
+    kprintf("Total RAM: %d MiB\n", (total / 1024) / 1024 - 1);
 
     // FIXME: This is hacky and will slow down the kernel.
     for (;;) {

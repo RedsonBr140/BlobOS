@@ -9,5 +9,3 @@ __attribute__((noreturn)) void halt(void);
 __attribute__((noreturn)) void hcf(void);
 void sti(void);
 void cli(void);
-
-extern void reloadSegments(void);

@@ -8,21 +8,27 @@
 
 enum Interrupts {
     ALL = 0xFF,
+    // Programmable Interval Timer
     TIMER = 0,
     KEYBOARD,
+    // Used internally by the two PICs. never raised
     CASCADE,
-    COM2_4,
-    COM1_3,
-    LPT,
+    COM2,
+    COM1,
+    LPT2,
     FLOPPY,
     FREE7,
+    // CMOS real-time clock
     CLOCK,
     FREE9,
     FREE10,
     FREE11,
     PS2MOUSE,
-    COPROC,
+    // FPU / Coprocessor / Inter-processor
+    FPU,
+    // Primary ATA Hard Disk
     IDE_1,
+    // Secondary ATA Hard Disk
     IDE_2
 };
 

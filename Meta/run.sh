@@ -22,4 +22,5 @@ fi
         -serial stdio\
         -enable-kvm\
         -boot dc\
-	-d int
+	-d int\
+	-m 2048
