@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="docs/assets/BlobOS_without_border.png" width="128" height="128"/>
+  <img src="docs/assets/BlobOS_without_border.png" width="128" height="128"/><br><br>
+  <a href="https://wakatime.com/badge/github/RedsonBr140/BlobOS"><img src="https://wakatime.com/badge/github/RedsonBr140/BlobOS.svg" alt="wakatime"></a>
 </p>
-<p align=center>My Operating System</p>
 
 ## 💡 About
 
-The point with this project is to learn about operating systems and computers, I don't want to create something huge.
+The point of this project is to learn about operating systems and computers, I don't want to create something huge.
 
 ## 🚀 Setup
 
@@ -35,4 +35,4 @@ make
 dd if=build/BlobOS.iso of=/dev/yourFlashDrive status=progress
 ```
 
-> ⚠️ dd is a dangerous command, make sure that you didn't set `of` to any disk with important data, also, it will overwrite anything on the disk, including partitions.
+> ⚠️ dd is a dangerous command. Ensure you didn't set `of` to any disk with important data. Also, it will overwrite anything on the disk, including partitions.
