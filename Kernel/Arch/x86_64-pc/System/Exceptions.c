@@ -82,11 +82,6 @@ Default_INT_Handler(struct interrupt_frame *frame) {
     kprintf("Unhandled interrupt!\n");
 }
 
-__attribute__((interrupt)) void TimerF(struct interrupt_frame *frame) {
-    kprintf(".");
-    PIC_SendEOI(TIMER);
-}
-
 void Load_Exceptions(void) {
     IDT_Add_Int(0, C_Int_0, IDT_FLAGS_INTERRUPT_GATE);
     IDT_Add_Int(1, C_Int_1, IDT_FLAGS_INTERRUPT_GATE);
@@ -112,6 +107,4 @@ void Load_Exceptions(void) {
     for (uint8_t i = 20; i < 255; i++) {
         IDT_Add_Int(i, Default_INT_Handler, IDT_FLAGS_INTERRUPT_GATE);
     }
-
-    IDT_Add_Int(PIC_REMAP_OFFSET + TIMER, TimerF, IDT_FLAGS_INTERRUPT_GATE);
 }

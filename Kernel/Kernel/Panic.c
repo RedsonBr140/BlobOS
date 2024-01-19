@@ -1,8 +1,8 @@
 #include <Asm/Asm.h>
-#include <Meta.h>
-#include <Framebuffer/Framebuffer.h>
+#include <Devices/Framebuffer.h>
 #include <Kernel/Panic.h>
 #include <LibK/stdio.h>
+#include <Meta.h>
 
 #include <Kernel/Stack.h>
 

@@ -1,4 +1,4 @@
-#include <Framebuffer/Framebuffer.h>
+#include <Devices/Framebuffer.h>
 #include <LibK/stdio.h>
 #include <LibK/stdlib.h>
 #include <LibK/string.h>

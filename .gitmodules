@@ -4,6 +4,6 @@
 	branch = v5.x-branch-binary
 	shallow = true
 [submodule "Kernel/Framebuffer/flanterm"]
-	path = Kernel/Framebuffer/flanterm
+	path = Kernel/Devices/Framebuffer/flanterm
 	url = https://github.com/mintsuki/flanterm
 	shallow = true

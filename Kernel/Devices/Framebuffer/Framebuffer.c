@@ -1,6 +1,6 @@
 #include "flanterm/backends/fb.h"
 #include "flanterm/flanterm.h"
-#include <Framebuffer/Framebuffer.h>
+#include <Devices/Framebuffer.h>
 #include <LibK/stdlib.h>
 #include <LibK/string.h>
 

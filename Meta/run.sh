@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/sh
 
 echo -e "===\nScript working directory: $(pwd)\n===\n"
 if [ ! -d "build" ]; then
