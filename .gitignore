@@ -83,3 +83,6 @@ dkms.conf
 
 bx_enh_dbg.ini
 compile_commands.json
+
+# vscode dumb stuff
+.vscode/

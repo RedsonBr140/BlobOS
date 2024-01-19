@@ -35,10 +35,8 @@ static void format_decimal(va_list *args) {
 };
 
 static const formatter_t FORMATTERS[256] = {
-    ['c'] = format_char,
-    ['s'] = format_string,
-    ['d'] = format_decimal,
-    ['p'] = format_hexa,
+    ['c'] = format_char, ['s'] = format_string, ['d'] = format_decimal,
+    ['p'] = format_hexa, ['x'] = format_hexa,
 };
 
 void kprintf(const char *format, ...) {

@@ -53,8 +53,8 @@ void Arch_entry(void) {
 
     for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
         struct limine_memmap_entry *entry = memmap_request.response->entries[i];
-        kprintf("Mem Entry %d: Base: %p | Lenght: %d | Type: %d\n", i,
-                entry->base, entry->length, entry->type);
+        /*kprintf("Mem Entry %d: Base: %p | Lenght: %d | Type: %d\n", i,
+                entry->base, entry->length, entry->type);*/
 
         total += entry->length;
     }

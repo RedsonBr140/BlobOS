@@ -58,7 +58,14 @@ void framebuffer_clear(uint32_t foreground, uint32_t background) {
     flanterm_write(ctx, "\033[H", 4);
 }
 
-void framebuffer_putchar(char c) { flanterm_write(ctx, &c, 1); }
+void framebuffer_putchar(char c) {
+    flanterm_write(ctx, &c, 1);
+    if (c == '\b') {
+        char space = ' ';
+        flanterm_write(ctx, &space, 1);
+        flanterm_write(ctx, &c, 1);
+    }
+}
 
 void framebuffer_puts(char *string) {
     flanterm_write(ctx, string, strlen(string));
