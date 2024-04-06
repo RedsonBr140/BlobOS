@@ -35,6 +35,7 @@ $(ISO_IMAGE): limine kernel
 clean:
 	rm -rf build *.iso *.img *.tar *.tar.gz
 	$(MAKE) -C Kernel/Arch/$(CONFIG_ARCH)-$(CONFIG_TARGET) clean
+	$(MAKE) -C limine clean
 
 .PHONY: distclean
 distclean: clean
