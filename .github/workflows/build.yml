@@ -26,7 +26,8 @@ jobs:
           make
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: BlobOS
+          name: BlobOS-${{ github.ref_name }}-${{ github.sha }}
           path: build/BlobOS.iso # Change this to the path of your OS build artifacts
+          compression-level: 3
