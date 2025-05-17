@@ -5,7 +5,7 @@
 #define ALIGN (sizeof(size_t))
 #define ONES ((size_t)-1 / UCHAR_MAX)
 #define HIGHS (ONES * (UCHAR_MAX / 2 + 1))
-#define HASZERO(x) (((x)-ONES) & ~(x)&HIGHS)
+#define HASZERO(x) (((x) - ONES) & ~(x) & HIGHS)
 
 // GCC and Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
@@ -97,4 +97,12 @@ char *strcpy(char *restrict d, const char *restrict s) {
 char *strcat(char *restrict dest, const char *restrict src) {
     strcpy(dest + strlen(dest), src);
     return dest;
+}
+
+int strcmp(const char *s1, const char *s2) {
+    while (*s1 && (*s1 == *s2)) {
+        s1++;
+        s2++;
+    }
+    return *(const unsigned char *)s1 - *(const unsigned char *)s2;
 }
