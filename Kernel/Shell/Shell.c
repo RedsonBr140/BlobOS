@@ -74,7 +74,7 @@ void shell_execute_command(char *command) {
         framebuffer_clear(0xFFFFFF, 0x000000); // White text on black background
     } else if (strcmp(command, "version") == 0) {
         kprintf("BlobOS Kernel Version %s\n", GIT_VERSION);
-    } else if strcmp (command, "panic") {
+    } else if (strcmp(command, "panic") == 0) {
         panic("Requested by the user.");
     } else if (strlen(command) > 0) {
         kprintf("Unknown command: %s\n", command);
