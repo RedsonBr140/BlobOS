@@ -6,6 +6,7 @@
 #include <LibK/stdio.h>
 #include <Meta.h>
 #include <Serial/Serial.h>
+#include <Shell/Shell.h>
 #include <limine.h>
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
@@ -61,8 +62,10 @@ void Arch_entry(void) {
 
     kprintf("Total RAM: %d MiB\n", (total / 1024) / 1024 - 1);
 
-    // FIXME: This is hacky and will slow down the kernel.
-    for (;;) {
-        io_wait();
+    shell_init();
+
+    while (1) {
+        // Wait for interrupts
+        asm volatile("hlt");
     }
 }

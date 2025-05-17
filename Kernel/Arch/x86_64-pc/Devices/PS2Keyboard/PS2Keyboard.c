@@ -116,68 +116,69 @@ void Set_CapsLockState() {
 }
 
 // Keyboard interrupt handler.
-__attribute__((interrupt)) void Keyboard_Handler(struct stack_frame *frame) {
-    // Wait until the keyboard is ready to send a scancode.
-    Keyboard_Wait();
-
-    // Read the scancode from the keyboard port.
-    uint8_t scancode = inb(KBD_PORT);
-
-    // TODO: Handle general purpose keys release
-    if (scancode & 0x80) {
-        PIC_SendEOI(KEYBOARD);
-        return;
-    }
-
-    if (scancode == 0xE0) {
-        // Handle extended scancodes (prefix).
-        kbd_state = PREFIX_STATE;
-        PIC_SendEOI(KEYBOARD);
-        return;
-    }
-
-    // TODO: Study how we should handle this extended state.
-    if (kbd_state == PREFIX_STATE)
-        kbd_state = NORMAL_STATE;
-
-    // Store the scancode in the global buffer.
-    keyboard_buffer[buf_position].scancode = scancode;
-
-    // Process specific key events.
-    switch (scancode) {
-    case CTRL_PRESSED:
-        // Set the CTRL bit in the status_mask.
-        keyboard_buffer[buf_position].status_mask |= 1 << CTRL_MASK;
-        break;
-    case CTRL_RELEASED:
-        // Clear the CTRL bit in the status_mask.
-        keyboard_buffer[buf_position].status_mask &= ~(1 << CTRL_MASK);
-        break;
-    case LSHIFT_PRESSED:
-    case RSHIFT_PRESSED:
-        // Set both LEFT and RIGHT SHIFT bits in the status_mask.
-        keyboard_buffer[buf_position].status_mask |= (1 << SHIFT_MASK);
-        break;
-    case LSHIFT_RELEASED:
-    case RSHIFT_RELEASED:
-        // Clear both LEFT and RIGHT SHIFT bits in the status_mask.
-        keyboard_buffer[buf_position].status_mask &= ~(1 << SHIFT_MASK);
-        break;
-    case 0x3A:
-        caps_state = !caps_state;
-        Set_CapsLockState();
-
-    default:
-        break;
-    };
-
-    kprintf("%c", Get_Printable_Char(keyboard_buffer[buf_position]));
-
-    // Update the buffer position.
-    buf_position = (buf_position + 1) % MAX_KEYB_BUFFER_SIZE;
-
-    // Send End of Interrupt (EOI) signal to the PIC.
-    PIC_SendEOI(KEYBOARD);
+__attribute__((interrupt)) void Keyboard_Handler(struct stack_frame *frame) {  
+    // Wait until the keyboard is ready to send a scancode.  
+    Keyboard_Wait();  
+  
+    // Read the scancode from the keyboard port.  
+    uint8_t scancode = inb(KBD_PORT);  
+  
+    // Handle key release (high bit set)  
+    if (scancode & 0x80) {  
+        PIC_SendEOI(KEYBOARD);  
+        return;  
+    }  
+  
+    if (scancode == 0xE0) {  
+        // Handle extended scancodes (prefix).  
+        kbd_state = PREFIX_STATE;  
+        PIC_SendEOI(KEYBOARD);  
+        return;  
+    }  
+  
+    // TODO: Study how we should handle this extended state.  
+    if (kbd_state == PREFIX_STATE)  
+        kbd_state = NORMAL_STATE;  
+  
+    // Store the scancode in the global buffer.  
+    keyboard_buffer[buf_position].scancode = scancode;  
+  
+    // Process specific key events.  
+    switch (scancode) {  
+    case CTRL_PRESSED:  
+        keyboard_buffer[buf_position].status_mask |= 1 << CTRL_MASK;  
+        break;  
+    case CTRL_RELEASED:  
+        keyboard_buffer[buf_position].status_mask &= ~(1 << CTRL_MASK);  
+        break;  
+    case LSHIFT_PRESSED:  
+    case RSHIFT_PRESSED:  
+        keyboard_buffer[buf_position].status_mask |= (1 << SHIFT_MASK);  
+        break;  
+    case LSHIFT_RELEASED:  
+    case RSHIFT_RELEASED:  
+        keyboard_buffer[buf_position].status_mask &= ~(1 << SHIFT_MASK);  
+        break;  
+    case 0x3A:  
+        caps_state = !caps_state;  
+        Set_CapsLockState();  
+        break;  
+    default:  
+        break;  
+    };  
+  
+    char printable_char = Get_Printable_Char(keyboard_buffer[buf_position]);  
+      
+    // Instead of directly printing the character, send it to the shell  
+    if (printable_char) {  
+        shell_process_keypress(printable_char);  
+    }  
+  
+    // Update the buffer position.  
+    buf_position = (buf_position + 1) % MAX_KEYB_BUFFER_SIZE;  
+  
+    // Send End of Interrupt (EOI) signal to the PIC.  
+    PIC_SendEOI(KEYBOARD);  
 }
 
 // Initialize the PS/2 keyboard interface.
